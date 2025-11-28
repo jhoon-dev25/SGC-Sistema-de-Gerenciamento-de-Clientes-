@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
+#include <filesystem>
 #include <limits>
 #include <string>
 #include <strings.h>
@@ -45,6 +46,7 @@ struct BaseClientes {
 
 // Declarações antecipadas
 bool salvar_clientes(BaseClientes &base);
+bool ha_espaco_para_salvar(const BaseClientes &base);
 void pausar();
 void limpar_tela();
 void desenhar_banner(const string &titulo);
@@ -143,6 +145,10 @@ bool garantir_capacidade(BaseClientes &base, size_t nova_capacidade) {
 
     size_t capacidade_alvo = base.capacidade == 0 ? 4 : base.capacidade;
     while (capacidade_alvo < nova_capacidade) {
+        if (capacidade_alvo > numeric_limits<size_t>::max() / 2) {
+            cerr << "Quantidade máxima de cadastros atingida na memória." << endl;
+            return false;
+        }
         capacidade_alvo *= 2;
     }
 
@@ -221,6 +227,42 @@ int encontrar_indice_por_id(BaseClientes &base, int id) {
 // Persistência em arquivo binário
 // --------------------------------------------------------------
 
+size_t estimar_tamanho_csv(const BaseClientes &base) {
+    const string cabecalho =
+        "id;nome_completo;endereco;ano_nascimento;documento;tipo_cliente;sexo;estado_civil;limite_credito;situacao_cadastral\n";
+
+    size_t tamanho = cabecalho.size();
+    for (size_t i = 0; i < base.tamanho; ++i) {
+        const Cliente &c = base.dados[i];
+        ostringstream linha;
+        linha << c.id << ';' << c.nome_completo << ';' << c.endereco << ';'
+              << c.ano_nascimento << ';' << c.documento << ';' << c.tipo_cliente
+              << ';' << c.sexo << ';' << c.estado_civil << ';' << fixed
+              << setprecision(2) << c.limite_credito << ';' << c.situacao_cadastral
+              << '\n';
+        tamanho += linha.str().size();
+    }
+    return tamanho;
+}
+
+bool ha_espaco_para_salvar(const BaseClientes &base) {
+    try {
+        namespace fs = std::filesystem;
+        const auto info = fs::space(fs::current_path());
+        const auto necessario =
+            static_cast<uintmax_t>(base.tamanho * sizeof(Cliente) +
+                                   estimar_tamanho_csv(base) + 1024); // margem
+        if (info.available < necessario) {
+            cerr << "Não há espaço suficiente em disco para salvar os dados." << endl;
+            return false;
+        }
+    } catch (const std::exception &e) {
+        cerr << "Aviso: não foi possível verificar espaço em disco: " << e.what()
+             << endl;
+    }
+    return true;
+}
+
 bool salvar_csv(const BaseClientes &base) {
     ofstream out(CSV_FILE, ios::trunc);
     if (!out) {
@@ -236,6 +278,11 @@ bool salvar_csv(const BaseClientes &base) {
             << c.ano_nascimento << ';' << c.documento << ';' << c.tipo_cliente
             << ';' << c.sexo << ';' << c.estado_civil << ';' << c.limite_credito
             << ';' << c.situacao_cadastral << "\n";
+    }
+    out.flush();
+    if (!out) {
+        perror("Falha ao salvar CSV");
+        return false;
     }
     return true;
 }
@@ -339,6 +386,10 @@ bool salvar_clientes(BaseClientes &base) {
     // Ordena em memória antes de gravar para manter o arquivo organizado
     ordenar_por_id(base.dados, base.tamanho);
 
+    if (!ha_espaco_para_salvar(base)) {
+        return false;
+    }
+
     ofstream out(DATA_FILE, ios::binary | ios::trunc);
     if (!out) {
         perror("Não foi possível abrir o arquivo de dados");
@@ -351,6 +402,11 @@ bool salvar_clientes(BaseClientes &base) {
             perror("Falha ao salvar dados");
             return false;
         }
+    }
+    out.flush();
+    if (!out) {
+        perror("Falha ao salvar dados");
+        return false;
     }
     atualizar_proximo_id(base);
     return salvar_csv(base);
@@ -505,12 +561,18 @@ bool inserir_cliente(BaseClientes &base) {
     }
 
     if (!garantir_capacidade(base, base.tamanho + 1)) {
+        cerr << endl << "Não há memória suficiente para novos cadastros." << endl << endl;
         return false;
     }
 
     base.dados[base.tamanho++] = novo;
     base.proximo_id++;
     if (!salvar_clientes(base)) {
+        base.tamanho--;
+        base.proximo_id--;
+        cerr << endl
+             << "Cadastro desfeito: não foi possível salvar por falta de espaço ou erro de gravação." << endl
+             << endl;
         return false;
     }
 
