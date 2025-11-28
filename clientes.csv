@@ -1,0 +1,101 @@
+id,nome_completo,endereco,ano_nascimento,documento,tipo_cliente,sexo,estado_civil,limite_credito,situacao_cadastral
+1,Sr. Guilherme Campos,Fazenda Cunha,1990,60879432187,F,M,D,11740.39,A
+2,Dr. Rodrigo Alves,"Lagoa Vargas, 86",1977,16039275812,F,M,V,11850.02,I
+3,Sra. Rafaela Mendonça,"Loteamento Nascimento, 61",1968,92830716000134,J,F,V,7824.15,I
+4,Camila Azevedo,"Praia de Caldeira, 905",1985,90453162000178,J,O,C,12716.58,I
+5,Sra. Antonella Pinto,"Estrada de Correia, 195",1956,04928316703,F,O,V,10221.27,A
+6,Murilo Costela,"Rodovia da Mata, 324",1993,91362875000199,J,M,D,1148.57,I
+7,Ana Beatriz Nascimento,"Vila Davi Câmara, 20",1997,74186503000130,J,F,D,11443.79,I
+8,Esther Rezende,"Fazenda João Guilherme Sampaio, 4",1958,21695034805,F,F,S,18869.81,A
+9,Stephany Jesus,"Viaduto Matteo da Cruz, 6",1990,21704589649,F,F,D,3148.21,A
+10,Lunna Ferreira,Aeroporto de Fernandes,1982,53486210000106,J,F,C,6672.65,I
+11,Thiago Cassiano,"Lago de Melo, 82",1960,01954326734,F,M,V,13482.58,A
+12,Agatha Azevedo,"Alameda de Cunha, 769",1981,16584702308,F,F,V,10913.89,A
+13,Fernanda Marques,"Travessa da Rocha, 45",1999,78352041932,F,F,C,5126.54,A
+14,Cauê Aparecida,"Colônia de Ribeiro, 31",1986,64185729000162,J,M,V,1523.37,I
+15,Sra. Stephany Farias,"Chácara de Campos, 853",1996,06841295749,F,F,D,16256.7,A
+16,Srta. Maria Alice Sá,"Área de Camargo, 32",1974,15068973000130,J,F,S,6316.69,A
+17,Ana Laura da Paz,"Rodovia Cunha, 772",2005,05987631000160,J,O,S,15733.21,I
+18,Joana Porto,"Via Moreira, 7",1999,46257198364,F,F,V,15846.69,I
+19,Liz Teixeira,Praça Correia,1968,14976250849,F,O,S,6085.26,I
+20,Sra. Maria Vitória Sá,"Vila Ravi Lucca Lopes, 539",2000,86419305233,F,F,C,16306.55,I
+21,Gabriel Fernandes,"Passarela da Costa, 3",2003,87364125000189,J,M,D,13014.42,A
+22,Ana Clara Teixeira,"Quadra de Vieira, 52",1988,76534081920,F,F,S,9017.86,A
+23,Sr. José Miguel Oliveira,"Vila Daniela Correia, 70",1968,73160258000129,J,M,C,18130.73,A
+24,Nicole Siqueira,"Parque Henry Pimenta, 89",1979,34096187593,F,O,V,7058.48,A
+25,Dra. Alexia Ribeiro,"Viaduto Cunha, 69",1961,37619820540,F,O,V,5329.17,I
+26,Dra. Júlia da Luz,"Viaduto Casa Grande, 866",1964,70264813000174,J,O,S,13569.54,I
+27,Laís Caldeira,"Praça de Novaes, 2",1965,13260479570,F,F,D,18931.62,A
+28,Dra. Laura Costa,"Colônia de Fogaça, 7",1974,94053726000136,J,F,D,13933.1,A
+29,Leandro Nogueira,"Recanto Valentim da Costa, 45",1990,45798062120,F,M,S,5000.2,A
+30,Yasmin Albuquerque,Largo Aragão,1993,18379604000156,J,O,C,2296.45,A
+31,Dra. Eloah da Rosa,Campo da Luz,1967,94570683274,F,F,D,12562.61,A
+32,Dra. Isadora da Paz,"Praia Cunha, 44",1968,71690258000105,J,O,V,13645.08,A
+33,Maria Julia Azevedo,"Conjunto Bruno da Conceição, 983",1965,48015269776,F,F,V,4806.08,A
+34,Luiz Felipe Cavalcante,"Largo Ribeiro, 75",1992,81245073680,F,M,V,13682.37,A
+35,Luara Costa,"Aeroporto de Oliveira, 1",1995,90158237000198,J,F,V,15307.03,A
+36,Antony Vasconcelos,Estação Pastor,1991,03174682517,F,M,V,2993.78,A
+37,Léo Montenegro,Esplanada Milena Porto,1984,20584793000140,J,M,S,3995.05,I
+38,Ana Lívia Pimenta,"Estrada Pires, 629",1993,57408392000140,J,O,V,19950.02,A
+39,Dr. Fernando da Conceição,"Trecho João Miguel Gonçalves, 73",1998,18037492532,F,M,C,12486.9,A
+40,João Miguel Macedo,"Vereda Montenegro, 757",1988,89741305214,F,M,S,6300.86,A
+41,Sophie Abreu,"Aeroporto Léo Cavalcanti, 36",1956,08769235465,F,F,C,12693.23,A
+42,Vitor Hugo Moura,"Estrada de Vasconcelos, 46",1986,90147562830,F,M,D,15856.26,I
+43,Lucas Gabriel da Cunha,"Estação de Vargas, 823",1969,38627015490,F,M,C,14967.22,I
+44,Lívia Sales,"Residencial Costa, 92",1989,65127983000177,J,F,D,9298.94,A
+45,Vinícius Almeida,"Passarela de Ribeiro, 992",1986,38452796137,F,M,V,6565.35,I
+46,Matheus Carvalho,"Avenida Cassiano, 2",1982,08956374210,F,M,D,2502.34,I
+47,Raquel Porto,"Trevo de Montenegro, 87",2002,18534067244,F,F,V,18946.64,A
+48,Lavínia Cavalcanti,"Praça Guilherme Gomes, 59",1997,14956802749,F,F,D,5009.46,I
+49,Heloisa Farias,Via Calebe Pastor,1965,39015724000144,J,F,C,16068.57,I
+50,Srta. Julia Silva,"Passarela Bianca Sales, 13",1997,74508269338,F,O,S,15149.54,I
+51,Maria Júlia Lima,"Morro Cavalcanti, 112",1956,31726594000146,J,F,S,18971.86,A
+52,Marcos Vinicius Pereira,"Aeroporto de Sousa, 958",1970,89153270000146,J,M,S,5598.39,A
+53,Igor Sá,"Trevo de Pastor, 57",1989,62387451000180,J,M,V,12716.44,A
+54,Evelyn da Paz,"Via Rodrigo Garcia, 181",1994,35472691800,F,F,C,9535.57,I
+55,Emilly Carvalho,"Trevo de Barbosa, 32",1995,86341502753,F,F,D,5094.71,A
+56,Beatriz Caldeira,"Núcleo Santos, 163",1964,27153048979,F,O,D,14262.01,I
+57,Maria Fernanda Pimenta,"Travessa Raul Camargo, 74",1982,85923647000148,J,F,D,5874.06,I
+58,Srta. Hellena Lopes,"Aeroporto Nogueira, 68",1992,12790468000106,J,O,C,5231.2,I
+59,Carlos Eduardo Cavalcante,"Residencial de Novaes, 620",1999,50897612000105,J,M,C,15711.35,A
+60,Lorena da Rosa,Rodovia de Nascimento,1964,30512874905,F,F,C,12698.46,A
+61,Ágatha Jesus,"Núcleo Enrico Moura, 17",1989,92814306000108,J,O,D,11108.85,I
+62,Esther Rios,"Morro Mariah da Rosa, 58",1980,05629817000147,J,F,V,15193.22,I
+63,Ágatha Pastor,"Trecho Novais, 12",1991,59617380439,F,F,V,4174.01,I
+64,João Pedro da Mata,"Praça Ana Beatriz Casa Grande, 90",1972,94516327864,F,M,D,15389.93,A
+65,Lucas da Paz,"Recanto Yan Barros, 50",1969,71964205867,F,M,D,12876.6,I
+66,Valentim Abreu,"Conjunto de Cirino, 69",1999,72105396895,F,M,C,6285.48,I
+67,Bruna Sá,"Vale de da Rosa, 539",1976,10628973000123,J,O,S,10302.29,A
+68,Anthony Gabriel da Cruz,"Colônia Aurora Silveira, 68",1980,82465731000177,J,M,V,11187.22,I
+69,Maria Júlia Aparecida,"Esplanada Evelyn da Costa, 5",1973,35284107000193,J,F,C,12121.56,I
+70,Dra. Marina Casa Grande,Jardim Sampaio,1958,16452839764,F,O,C,10724.6,A
+71,Davi Lucas Mendes,"Lago Henry Gabriel Jesus, 7",1967,05172346880,F,M,D,13380.66,I
+72,Daniel Correia,"Feira Novais, 2",1984,67150384000108,J,M,V,18781.09,I
+73,Anna Liz Albuquerque,"Ladeira de Barbosa, 97",1963,82374095000178,J,O,V,5756.19,I
+74,Srta. Heloísa Nogueira,"Morro Brito, 69",1958,01573984000162,J,O,D,15256.94,I
+75,Sra. Juliana Santos,"Campo de Nunes, 53",2004,16390485298,F,O,D,16499.16,I
+76,Sofia Porto,"Colônia Clara Rodrigues, 91",1983,76910248350,F,F,D,13431.16,A
+77,Bruna Farias,"Estrada Freitas, 26",1996,41892673000180,J,F,S,10792.29,A
+78,Lara Alves,"Setor de Pimenta, 575",1984,03864512000194,J,F,S,5985.47,A
+79,Dra. Ana Vitória Martins,"Travessa João Guilherme Teixeira, 22",1961,20137584997,F,F,D,2837.81,I
+80,Maria Flor Vasconcelos,"Trecho de Fogaça, 16",1983,95817064000196,J,F,S,3106.57,I
+81,Vitória Santos,"Travessa de Brito, 44",1997,07685412000151,J,F,C,12130.67,A
+82,Lívia Cassiano,"Esplanada de das Neves, 545",1996,31527486982,F,O,D,14642.78,I
+83,Maya Costela,"Feira Marques, 31",1963,61038749204,F,O,S,13430.18,A
+84,João Vitor da Cunha,"Pátio Pereira, 51",1968,57492608101,F,M,C,13862.44,A
+85,Noah da Mata,"Passarela de Andrade, 19",1992,73845619000170,J,M,C,8488.63,I
+86,Alexia Rios,"Recanto Souza, 1",1970,94735012699,F,F,D,16501.18,A
+87,Júlia Sales,"Esplanada Liam Santos, 11",1988,39518746000127,J,F,V,5156.67,I
+88,Luiz Henrique Casa Grande,"Lago Porto, 326",2004,20145938689,F,M,D,10229.41,I
+89,Antony Cardoso,"Pátio Pinto, 446",1955,37524016999,F,M,C,15816.8,A
+90,Pedro Miguel da Rosa,"Sítio Barbosa, 2",1984,60249178567,F,M,S,7915.68,I
+91,Luna Rios,"Avenida de Silva, 53",1988,25306791859,F,O,C,1057.45,I
+92,Carolina Montenegro,"Recanto de Vieira, 17",1971,91356048242,F,O,V,11668.97,I
+93,Cauã Duarte,"Setor Ana Sophia Novais, 1",1966,23469087000146,J,M,V,14089.05,I
+94,Brenda Fonseca,Alameda Lopes,2001,10687234000102,J,F,S,7975.95,A
+95,Srta. Jade Cassiano,Vale da Cunha,1967,13098574666,F,F,S,19101.33,I
+96,Aylla Lima,"Rua Gomes, 9",1985,45287139000104,J,F,C,4474.5,I
+97,Eloá Ribeiro,"Feira de Rodrigues, 4",1982,90365124000163,J,F,D,15886.41,A
+98,Sra. Isabelly da Luz,"Jardim Benjamim Ferreira, 275",1957,89647315000139,J,F,C,1577.0,A
+99,Dr. Lucas Marques,"Ladeira Jesus, 64",1958,71809265000183,J,M,D,4196.26,I
+100,Gustavo Aragão,Chácara Eloá Pereira,1960,97125304850,F,M,D,4350.09,A
