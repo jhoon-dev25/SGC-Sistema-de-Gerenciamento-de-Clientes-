@@ -83,7 +83,7 @@ int ler_inteiro(const string &rotulo) {
         try {
             return stoi(texto);
         } catch (...) {
-            cout << "Valor inválido. Tente novamente.\n";
+            cout << "Valor inválido. Tente novamente." << endl;
         }
     }
 }
@@ -94,7 +94,7 @@ short ler_short(const string &rotulo) {
         try {
             return static_cast<short>(stoi(texto));
         } catch (...) {
-            cout << "Valor inválido. Tente novamente.\n";
+            cout << "Valor inválido. Tente novamente." << endl;
         }
     }
 }
@@ -105,7 +105,7 @@ float ler_float(const string &rotulo) {
         try {
             return stof(texto);
         } catch (...) {
-            cout << "Valor inválido. Tente novamente.\n";
+            cout << "Valor inválido. Tente novamente." << endl;
         }
     }
 }
@@ -249,54 +249,57 @@ bool importar_de_csv(BaseClientes &base) {
     string linha;
     bool primeira = true;
     while (getline(in, linha)) {
+        bool pular_linha = false;
         if (primeira) {
             primeira = false;
             if (linha.find("id;") == 0) {
-                continue;
+                pular_linha = true;
             }
         }
         if (linha.empty()) {
-            continue;
+            pular_linha = true;
         }
 
-        stringstream ss(linha);
-        string campo;
-        Cliente cli{};
+        if (!pular_linha) {
+            stringstream ss(linha);
+            string campo;
+            Cliente cli{};
 
-        getline(ss, campo, ';');
-        cli.id = stoi(campo);
+            getline(ss, campo, ';');
+            cli.id = stoi(campo);
 
-        getline(ss, campo, ';');
-        strncpy(cli.nome_completo, campo.c_str(), MAX_TEXT - 1);
+            getline(ss, campo, ';');
+            strncpy(cli.nome_completo, campo.c_str(), MAX_TEXT - 1);
 
-        getline(ss, campo, ';');
-        strncpy(cli.endereco, campo.c_str(), MAX_TEXT - 1);
+            getline(ss, campo, ';');
+            strncpy(cli.endereco, campo.c_str(), MAX_TEXT - 1);
 
-        getline(ss, campo, ';');
-        cli.ano_nascimento = static_cast<short>(stoi(campo));
+            getline(ss, campo, ';');
+            cli.ano_nascimento = static_cast<short>(stoi(campo));
 
-        getline(ss, campo, ';');
-        strncpy(cli.documento, campo.c_str(), sizeof(cli.documento) - 1);
+            getline(ss, campo, ';');
+            strncpy(cli.documento, campo.c_str(), sizeof(cli.documento) - 1);
 
-        getline(ss, campo, ';');
-        cli.tipo_cliente = campo.empty() ? '\0' : campo[0];
+            getline(ss, campo, ';');
+            cli.tipo_cliente = campo.empty() ? '\0' : campo[0];
 
-        getline(ss, campo, ';');
-        cli.sexo = campo.empty() ? '\0' : campo[0];
+            getline(ss, campo, ';');
+            cli.sexo = campo.empty() ? '\0' : campo[0];
 
-        getline(ss, campo, ';');
-        cli.estado_civil = campo.empty() ? '\0' : campo[0];
+            getline(ss, campo, ';');
+            cli.estado_civil = campo.empty() ? '\0' : campo[0];
 
-        getline(ss, campo, ';');
-        cli.limite_credito = stof(campo);
+            getline(ss, campo, ';');
+            cli.limite_credito = stof(campo);
 
-        getline(ss, campo, ';');
-        cli.situacao_cadastral = campo.empty() ? '\0' : campo[0];
+            getline(ss, campo, ';');
+            cli.situacao_cadastral = campo.empty() ? '\0' : campo[0];
 
-        if (!garantir_capacidade(base, base.tamanho + 1)) {
-            return false;
+            if (!garantir_capacidade(base, base.tamanho + 1)) {
+                return false;
+            }
+            base.dados[base.tamanho++] = cli;
         }
-        base.dados[base.tamanho++] = cli;
     }
     atualizar_proximo_id(base);
     return true;
@@ -427,21 +430,21 @@ Cliente ler_dados_cliente(int id_atribuido) {
 }
 
 void imprimir_cartao(const Cliente &c) {
-    cout << "+------------------------------------------------+\n";
-    cout << "| ID: " << setw(6) << left << c.id << " Nome: " << setw(27) << left << c.nome_completo << "|\n";
+    cout << "+------------------------------------------------+" << endl;
+    cout << "| ID: " << setw(6) << left << c.id << " Nome: " << setw(27) << left << c.nome_completo << "|" << endl;
     cout << "| Documento: " << setw(14) << left << c.documento << " Tipo: " << setw(1) << left << c.tipo_cliente
-         << " Sexo: " << setw(1) << left << c.sexo << " Estado Civil: " << setw(1) << left << c.estado_civil << "             |\n";
+         << " Sexo: " << setw(1) << left << c.sexo << " Estado Civil: " << setw(1) << left << c.estado_civil << "             |" << endl;
     cout << "| Limite: R$ " << setw(10) << left << fixed << setprecision(2) << c.limite_credito
-         << " Situação: " << setw(1) << left << c.situacao_cadastral << " Ano Nasc.: " << setw(4) << left << c.ano_nascimento << "      |\n";
-    cout << "| Endereço: " << setw(39) << left << c.endereco << "|\n";
-    cout << "+------------------------------------------------+\n\n";
+         << " Situação: " << setw(1) << left << c.situacao_cadastral << " Ano Nasc.: " << setw(4) << left << c.ano_nascimento << "      |" << endl;
+    cout << "| Endereço: " << setw(39) << left << c.endereco << "|" << endl;
+    cout << "+------------------------------------------------+" << endl << endl;
 }
 
 void listar_clientes(BaseClientes &base) {
     desenhar_banner("Clientes cadastrados");
 
     if (base.tamanho == 0) {
-        cout << "Nenhum cliente cadastrado ainda.\n\n";
+        cout << "Nenhum cliente cadastrado ainda." << endl << endl;
         return;
     }
 
@@ -455,7 +458,7 @@ void listar_clientes(BaseClientes &base) {
             ate = base.tamanho;
         }
 
-        cout << "Mostrando registros " << (indice + 1) << " a " << ate << " de " << base.tamanho << "\n\n";
+        cout << "Mostrando registros " << (indice + 1) << " a " << ate << " de " << base.tamanho << endl << endl;
         for (size_t i = indice; i < ate; ++i) {
             imprimir_cartao(base.dados[i]);
         }
@@ -474,7 +477,7 @@ void listar_clientes(BaseClientes &base) {
                 if (pos >= 0) {
                     manipular_cliente(base, static_cast<size_t>(pos));
                 } else {
-                    cout << "\nID não encontrado.\n\n";
+                    cout << endl << "ID não encontrado." << endl << endl;
                 }
             } else if (acao == 'R') {
                 int id = ler_inteiro("Informe o ID para remoção");
@@ -482,7 +485,7 @@ void listar_clientes(BaseClientes &base) {
                 if (pos >= 0) {
                     manipular_cliente(base, static_cast<size_t>(pos));
                 } else {
-                    cout << "\nID não encontrado.\n\n";
+                    cout << endl << "ID não encontrado." << endl << endl;
                 }
             } else if (acao == 'N') {
                 inserir_cliente(base);
@@ -497,7 +500,7 @@ bool inserir_cliente(BaseClientes &base) {
     desenhar_banner("Novo cadastro de cliente");
     Cliente novo = ler_dados_cliente(base.proximo_id);
     if (existe_documento(base, novo.documento)) {
-        cout << "\nDocumento " << novo.documento << " já cadastrado.\n\n";
+        cout << endl << "Documento " << novo.documento << " já cadastrado." << endl << endl;
         return false;
     }
 
@@ -511,7 +514,7 @@ bool inserir_cliente(BaseClientes &base) {
         return false;
     }
 
-    cout << "\nCliente cadastrado com sucesso!\n\n";
+    cout << endl << "Cliente cadastrado com sucesso!" << endl << endl;
     return true;
 }
 
@@ -520,19 +523,17 @@ bool atualizar_cliente(BaseClientes &base) {
     int id = ler_inteiro("Informe o ID para atualização");
     int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
-        cout << "\nCliente não encontrado.\n\n";
+        cout << endl << "Cliente não encontrado." << endl << endl;
         return false;
     }
 
-    cout << "\nAtualizando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")\n";
+    cout << endl << "Atualizando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")" << endl;
     Cliente atualizado = ler_dados_cliente(id);
 
     for (size_t i = 0; i < base.tamanho; ++i) {
-        if (static_cast<int>(i) == indice) {
-            continue;
-        }
-        if (strcmp(base.dados[i].documento, atualizado.documento) == 0) {
-            cout << "\nDocumento " << atualizado.documento << " já cadastrado em outro cliente.\n\n";
+        bool mesmo_indice = static_cast<int>(i) == indice;
+        if (!mesmo_indice && strcmp(base.dados[i].documento, atualizado.documento) == 0) {
+            cout << endl << "Documento " << atualizado.documento << " já cadastrado em outro cliente." << endl << endl;
             return false;
         }
     }
@@ -542,7 +543,7 @@ bool atualizar_cliente(BaseClientes &base) {
         return false;
     }
 
-    cout << "\nRegistro atualizado com sucesso!\n\n";
+    cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
 
@@ -551,7 +552,7 @@ bool remover_cliente(BaseClientes &base) {
     int id = ler_inteiro("Informe o ID para exclusão");
     int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
-        cout << "\nCliente não encontrado.\n\n";
+        cout << endl << "Cliente não encontrado." << endl << endl;
         return false;
     }
 
@@ -564,21 +565,19 @@ bool remover_cliente(BaseClientes &base) {
         return false;
     }
 
-    cout << "\nRegistro removido.\n\n";
+    cout << endl << "Registro removido." << endl << endl;
     return true;
 }
 
 bool editar_por_indice(BaseClientes &base, size_t indice) {
     int id = base.dados[indice].id;
-    cout << "\nEditando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")\n";
+    cout << endl << "Editando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")" << endl;
     Cliente atualizado = ler_dados_cliente(id);
 
     for (size_t i = 0; i < base.tamanho; ++i) {
-        if (i == indice) {
-            continue;
-        }
-        if (strcmp(base.dados[i].documento, atualizado.documento) == 0) {
-            cout << "\nDocumento " << atualizado.documento << " já cadastrado em outro cliente.\n\n";
+        bool mesmo_indice = i == indice;
+        if (!mesmo_indice && strcmp(base.dados[i].documento, atualizado.documento) == 0) {
+            cout << endl << "Documento " << atualizado.documento << " já cadastrado em outro cliente." << endl << endl;
             return false;
         }
     }
@@ -588,12 +587,12 @@ bool editar_por_indice(BaseClientes &base, size_t indice) {
         return false;
     }
 
-    cout << "\nRegistro atualizado com sucesso!\n\n";
+    cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
 
 bool remover_por_indice(BaseClientes &base, size_t indice) {
-    cout << "\nRemovendo registro de ID " << base.dados[indice].id << "...\n";
+    cout << endl << "Removendo registro de ID " << base.dados[indice].id << "..." << endl;
     for (size_t i = indice; i + 1 < base.tamanho; ++i) {
         base.dados[i] = base.dados[i + 1];
     }
@@ -601,7 +600,7 @@ bool remover_por_indice(BaseClientes &base, size_t indice) {
     if (!salvar_clientes(base)) {
         return false;
     }
-    cout << "\nCliente removido com sucesso!\n\n";
+    cout << endl << "Cliente removido com sucesso!" << endl << endl;
     return true;
 }
 
@@ -622,7 +621,7 @@ bool manipular_cliente(BaseClientes &base, size_t indice) {
             case 'V':
                 return false;
             default:
-                cout << "Opção inválida. Tente novamente.\n";
+                cout << "Opção inválida. Tente novamente." << endl;
         }
     }
 }
@@ -632,7 +631,7 @@ void buscar_por_id(BaseClientes &base) {
     int id = ler_inteiro("Informe o ID para busca");
     int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
-        cout << "\nNenhum cliente com ID " << id << " encontrado.\n\n";
+        cout << endl << "Nenhum cliente com ID " << id << " encontrado." << endl << endl;
         return;
     }
 
@@ -658,7 +657,7 @@ void buscar_por_nome(BaseClientes &base) {
 
     int indice = busca_binaria_nome(copia, base.tamanho, termo);
     if (indice < 0) {
-        cout << "\nNenhum cliente chamado '" << termo << "' encontrado.\n\n";
+        cout << endl << "Nenhum cliente chamado '" << termo << "' encontrado." << endl << endl;
     } else {
         const Cliente &c = copia[indice];
         imprimir_cartao(c);
@@ -690,20 +689,20 @@ void limpar_tela() {
 
 void desenhar_banner(const string &titulo) {
     limpar_tela();
-    cout << "==================================================\n";
-    cout << "  " << titulo << "\n";
-    cout << "==================================================\n\n";
+    cout << "==================================================" << endl;
+    cout << "  " << titulo << endl;
+    cout << "==================================================" << endl << endl;
 }
 
 void exibir_menu() {
     desenhar_banner("Sistema de Gerenciamento de Clientes");
-    cout << "1 - Listar clientes\n";
-    cout << "2 - Inserir novo cliente\n";
-    cout << "3 - Atualizar cliente\n";
-    cout << "4 - Remover cliente\n";
-    cout << "5 - Buscar por ID (binária)\n";
-    cout << "6 - Buscar por nome (binária)\n";
-    cout << "0 - Sair\n";
+    cout << "1 - Listar clientes" << endl;
+    cout << "2 - Inserir novo cliente" << endl;
+    cout << "3 - Atualizar cliente" << endl;
+    cout << "4 - Remover cliente" << endl;
+    cout << "5 - Buscar por ID (binária)" << endl;
+    cout << "6 - Buscar por nome (binária)" << endl;
+    cout << "0 - Sair" << endl;
 }
 
 int main() {
@@ -745,14 +744,14 @@ int main() {
             case 0:
                 break;
             default:
-                cout << "Opção inválida!\n\n";
+                cout << "Opção inválida!" << endl << endl;
                 pausar();
                 break;
         }
-        cout << "\n";
+        cout << endl;
     }
 
-    cout << "Encerrando o sistema.\n";
+    cout << "Encerrando o sistema." << endl;
     destruir_base(base);
     return 0;
 }
