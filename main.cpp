@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
-#include <filesystem>
 #include <limits>
 #include <string>
 #include <strings.h>
@@ -42,6 +41,7 @@ struct BaseClientes {
     size_t tamanho = 0;
     size_t capacidade = 0;
     int proximo_id = 1;
+    bool solicitar_salvar = false;
 };
 
 // Declarações antecipadas
@@ -576,6 +576,7 @@ bool inserir_cliente(BaseClientes &base) {
         return false;
     }
 
+    base.solicitar_salvar = true;
     cout << endl << "Cliente cadastrado com sucesso!" << endl << endl;
     return true;
 }
@@ -605,6 +606,7 @@ bool atualizar_cliente(BaseClientes &base) {
         return false;
     }
 
+    base.solicitar_salvar = true;
     cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
@@ -627,6 +629,7 @@ bool remover_cliente(BaseClientes &base) {
         return false;
     }
 
+    base.solicitar_salvar = true;
     cout << endl << "Registro removido." << endl << endl;
     return true;
 }
@@ -649,6 +652,7 @@ bool editar_por_indice(BaseClientes &base, size_t indice) {
         return false;
     }
 
+    base.solicitar_salvar = true;
     cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
@@ -662,6 +666,7 @@ bool remover_por_indice(BaseClientes &base, size_t indice) {
     if (!salvar_clientes(base)) {
         return false;
     }
+    base.solicitar_salvar = true;
     cout << endl << "Cliente removido com sucesso!" << endl << endl;
     return true;
 }
@@ -803,8 +808,34 @@ int main() {
                 buscar_por_nome(base);
                 pausar();
                 break;
-            case 0:
+            case 0: {
+                bool entrada_valida = false;
+                while (!entrada_valida) {
+                    char resposta = ler_char("Deseja salvar as alterações antes de sair? (S/N)");
+                    char escolha = static_cast<char>(toupper(static_cast<unsigned char>(resposta)));
+
+                    if (escolha == 'S') {
+                        if (!salvar_clientes(base)) {
+                            cout << endl
+                                 << "Falha ao salvar os dados. Permanecendo no sistema para evitar perda de informações." << endl
+                                 << endl;
+                            opcao = -1;
+                        } else {
+                            base.solicitar_salvar = false;
+                            cout << endl << "Dados salvos com sucesso." << endl << endl;
+                        }
+                        entrada_valida = true;
+                    } else if (escolha == 'N') {
+                        if (base.solicitar_salvar) {
+                            cout << endl << "Saindo sem salvar alterações." << endl << endl;
+                        }
+                        entrada_valida = true;
+                    } else {
+                        cout << "Opção inválida. Responda com 'S' para sim ou 'N' para não." << endl;
+                    }
+                }
                 break;
+            }
             default:
                 cout << "Opção inválida!" << endl << endl;
                 pausar();
