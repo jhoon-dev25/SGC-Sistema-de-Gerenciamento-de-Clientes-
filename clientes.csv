@@ -1,101 +1,101 @@
 id;nome_completo;endereco;ano_nascimento;documento;tipo_cliente;sexo;estado_civil;limite_credito;situacao_cadastral
-1;Cliente 001 Teste;Rua A 101, Bairro 2;1951;25670787013021;J;F;C;537.50;I
-2;Cliente 002 Teste;Rua B 102, Bairro 3;1952;41246013015;F;O;V;575.00;A
-3;Cliente 003 Teste;Rua C 103, Bairro 4;1953;29637549160158;J;M;D;612.50;I
-4;Cliente 004 Teste;Rua D 104, Bairro 5;1954;26048021673;F;F;S;650.00;A
-5;Cliente 005 Teste;Rua E 105, Bairro 6;1955;86754897461584;J;O;C;687.50;I
-6;Cliente 006 Teste;Rua F 106, Bairro 7;1956;87682810754;F;M;V;725.00;A
-7;Cliente 007 Teste;Rua G 107, Bairro 8;1957;14472873095577;J;F;D;762.50;I
-8;Cliente 008 Teste;Rua H 108, Bairro 9;1958;18717912686;F;O;S;800.00;A
-9;Cliente 009 Teste;Rua I 109, Bairro 10;1959;42741474740363;J;M;C;837.50;I
-10;Cliente 010 Teste;Rua J 110, Bairro 11;1960;93774863057;F;F;V;875.00;A
-11;Cliente 011 Teste;Rua K 111, Bairro 12;1961;88984562544563;J;O;D;912.50;I
-12;Cliente 012 Teste;Rua L 112, Bairro 13;1962;68175080694;F;M;S;950.00;A
-13;Cliente 013 Teste;Rua M 113, Bairro 14;1963;73218570415072;J;F;C;987.50;I
-14;Cliente 014 Teste;Rua N 114, Bairro 15;1964;46890615212;F;O;V;1025.00;A
-15;Cliente 015 Teste;Rua O 115, Bairro 1;1965;32470434892733;J;M;D;1062.50;I
-16;Cliente 016 Teste;Rua P 116, Bairro 2;1966;68833060730;F;F;S;1100.00;A
-17;Cliente 017 Teste;Rua Q 117, Bairro 3;1967;49107138594934;J;O;C;1137.50;I
-18;Cliente 018 Teste;Rua R 118, Bairro 4;1968;36437583152;F;M;V;1175.00;A
-19;Cliente 019 Teste;Rua S 119, Bairro 5;1969;24385291136889;J;F;D;1212.50;I
-20;Cliente 020 Teste;Rua T 120, Bairro 6;1970;61937947921;F;O;S;1250.00;A
-21;Cliente 021 Teste;Rua U 121, Bairro 7;1971;60522115696535;J;M;C;1287.50;I
-22;Cliente 022 Teste;Rua V 122, Bairro 8;1972;60884600851;F;F;V;1325.00;A
-23;Cliente 023 Teste;Rua W 123, Bairro 9;1973;47227074537987;J;O;D;1362.50;I
-24;Cliente 024 Teste;Rua X 124, Bairro 10;1974;17761556863;F;M;S;1400.00;A
-25;Cliente 025 Teste;Rua Y 125, Bairro 11;1975;74659571848144;J;F;C;1437.50;I
-26;Cliente 026 Teste;Rua Z 126, Bairro 12;1976;25187984005;F;O;V;1475.00;A
-27;Cliente 027 Teste;Rua A 127, Bairro 13;1977;21091231351059;J;M;D;1512.50;I
-28;Cliente 028 Teste;Rua B 128, Bairro 14;1978;51025702129;F;F;S;1550.00;A
-29;Cliente 029 Teste;Rua C 129, Bairro 15;1979;98475593596210;J;O;C;1587.50;I
-30;Cliente 030 Teste;Rua D 130, Bairro 1;1980;60945643201;F;M;V;1625.00;A
-31;Cliente 031 Teste;Rua E 131, Bairro 2;1981;37060773673407;J;F;D;1662.50;I
-32;Cliente 032 Teste;Rua F 132, Bairro 3;1982;21616047600;F;O;S;1700.00;A
-33;Cliente 033 Teste;Rua G 133, Bairro 4;1983;63494251469520;J;M;C;1737.50;I
-34;Cliente 034 Teste;Rua H 134, Bairro 5;1984;71323429689;F;F;V;1775.00;A
-35;Cliente 035 Teste;Rua I 135, Bairro 6;1985;32889447662657;J;O;D;1812.50;I
-36;Cliente 036 Teste;Rua J 136, Bairro 7;1986;58834555400;F;M;S;1850.00;A
-37;Cliente 037 Teste;Rua K 137, Bairro 8;1987;20048711796139;J;F;C;1887.50;I
-38;Cliente 038 Teste;Rua L 138, Bairro 9;1988;98515543667;F;O;V;1925.00;A
-39;Cliente 039 Teste;Rua M 139, Bairro 10;1989;85171252649473;J;M;D;1962.50;I
-40;Cliente 040 Teste;Rua N 140, Bairro 11;1990;43196346836;F;F;S;2000.00;A
-41;Cliente 041 Teste;Rua O 141, Bairro 12;1991;75056571440879;J;O;C;2037.50;I
-42;Cliente 042 Teste;Rua P 142, Bairro 13;1992;45989487095;F;M;V;2075.00;A
-43;Cliente 043 Teste;Rua Q 143, Bairro 14;1993;40908976742969;J;F;D;2112.50;I
-44;Cliente 044 Teste;Rua R 144, Bairro 15;1994;55890068783;F;O;S;2150.00;A
-45;Cliente 045 Teste;Rua S 145, Bairro 1;1995;17871712980537;J;M;C;2187.50;I
-46;Cliente 046 Teste;Rua T 146, Bairro 2;1996;62894468092;F;F;V;2225.00;A
-47;Cliente 047 Teste;Rua U 147, Bairro 3;1997;19312639036062;J;O;D;2262.50;I
-48;Cliente 048 Teste;Rua V 148, Bairro 4;1998;91359177700;F;M;S;2300.00;A
-49;Cliente 049 Teste;Rua W 149, Bairro 5;1999;39924388682455;J;F;C;2337.50;I
-50;Cliente 050 Teste;Rua X 150, Bairro 6;2000;77239597077;F;O;V;2375.00;A
-51;Cliente 051 Teste;Rua Y 151, Bairro 7;2001;30106712666281;J;M;D;2412.50;I
-52;Cliente 052 Teste;Rua Z 152, Bairro 8;2002;28317520862;F;F;S;2450.00;A
-53;Cliente 053 Teste;Rua A 153, Bairro 9;2003;85855828472443;J;O;C;2487.50;I
-54;Cliente 054 Teste;Rua B 154, Bairro 10;2004;68345352569;F;M;V;2525.00;A
-55;Cliente 055 Teste;Rua C 155, Bairro 11;2005;92127925786741;J;F;D;2562.50;I
-56;Cliente 056 Teste;Rua D 156, Bairro 12;2006;58960052375;F;O;S;2600.00;A
-57;Cliente 057 Teste;Rua E 157, Bairro 13;2007;29469076176880;J;M;C;2637.50;I
-58;Cliente 058 Teste;Rua F 158, Bairro 14;2008;76612908200;F;F;V;2675.00;A
-59;Cliente 059 Teste;Rua G 159, Bairro 15;2009;31509667157813;J;O;D;2712.50;I
-60;Cliente 060 Teste;Rua H 160, Bairro 1;1950;34169696708;F;M;S;2750.00;A
-61;Cliente 061 Teste;Rua I 161, Bairro 2;1951;93938359028968;J;F;C;2787.50;I
-62;Cliente 062 Teste;Rua J 162, Bairro 3;1952;61812456976;F;O;V;2825.00;A
-63;Cliente 063 Teste;Rua K 163, Bairro 4;1953;93865170464034;J;M;D;2862.50;I
-64;Cliente 064 Teste;Rua L 164, Bairro 5;1954;74407850905;F;F;S;2900.00;A
-65;Cliente 065 Teste;Rua M 165, Bairro 6;1955;45384213113257;J;O;C;2937.50;I
-66;Cliente 066 Teste;Rua N 166, Bairro 7;1956;87185193913;F;M;V;2975.00;A
-67;Cliente 067 Teste;Rua O 167, Bairro 8;1957;26122107738553;J;F;D;3012.50;I
-68;Cliente 068 Teste;Rua P 168, Bairro 9;1958;55702582931;F;O;S;3050.00;A
-69;Cliente 069 Teste;Rua Q 169, Bairro 10;1959;51305179598569;J;M;C;3087.50;I
-70;Cliente 070 Teste;Rua R 170, Bairro 11;1960;33342139034;F;F;V;3125.00;A
-71;Cliente 071 Teste;Rua S 171, Bairro 12;1961;10457215261859;J;O;D;3162.50;I
-72;Cliente 072 Teste;Rua T 172, Bairro 13;1962;79486780724;F;M;S;3200.00;A
-73;Cliente 073 Teste;Rua U 173, Bairro 14;1963;24976175700591;J;F;C;3237.50;I
-74;Cliente 074 Teste;Rua V 174, Bairro 15;1964;99638194710;F;O;V;3275.00;A
-75;Cliente 075 Teste;Rua W 175, Bairro 1;1965;81449525236135;J;M;D;3312.50;I
-76;Cliente 076 Teste;Rua X 176, Bairro 2;1966;38385310919;F;F;S;3350.00;A
-77;Cliente 077 Teste;Rua Y 177, Bairro 3;1967;62622595750269;J;O;C;3387.50;I
-78;Cliente 078 Teste;Rua Z 178, Bairro 4;1968;34749795425;F;M;V;3425.00;A
-79;Cliente 079 Teste;Rua A 179, Bairro 5;1969;94293030607569;J;F;D;3462.50;I
-80;Cliente 080 Teste;Rua B 180, Bairro 6;1970;75816749115;F;O;S;3500.00;A
-81;Cliente 081 Teste;Rua C 181, Bairro 7;1971;25741138791810;J;M;C;3537.50;I
-82;Cliente 082 Teste;Rua D 182, Bairro 8;1972;61235088433;F;F;V;3575.00;A
-83;Cliente 083 Teste;Rua E 183, Bairro 9;1973;43699634167551;J;O;D;3612.50;I
-84;Cliente 084 Teste;Rua F 184, Bairro 10;1974;40313557786;F;M;S;3650.00;A
-85;Cliente 085 Teste;Rua G 185, Bairro 11;1975;89851508022456;J;F;C;3687.50;I
-86;Cliente 086 Teste;Rua H 186, Bairro 12;1976;22657051510;F;O;V;3725.00;A
-87;Cliente 087 Teste;Rua I 187, Bairro 13;1977;84971920913093;J;M;D;3762.50;I
-88;Cliente 088 Teste;Rua J 188, Bairro 14;1978;30469103028;F;F;S;3800.00;A
-89;Cliente 089 Teste;Rua K 189, Bairro 15;1979;33238134459824;J;O;C;3837.50;I
-90;Cliente 090 Teste;Rua L 190, Bairro 1;1980;79857886275;F;M;V;3875.00;A
-91;Cliente 091 Teste;Rua M 191, Bairro 2;1981;95370517046682;J;F;D;3912.50;I
-92;Cliente 092 Teste;Rua N 192, Bairro 3;1982;62878418842;F;O;S;3950.00;A
-93;Cliente 093 Teste;Rua O 193, Bairro 4;1983;62556011038862;J;M;C;3987.50;I
-94;Cliente 094 Teste;Rua P 194, Bairro 5;1984;72352513460;F;F;V;4025.00;A
-95;Cliente 095 Teste;Rua Q 195, Bairro 6;1985;44888539054487;J;O;D;4062.50;I
-96;Cliente 096 Teste;Rua R 196, Bairro 7;1986;19555002319;F;M;S;4100.00;A
-97;Cliente 097 Teste;Rua S 197, Bairro 8;1987;12960684533403;J;F;C;4137.50;I
-98;Cliente 098 Teste;Rua T 198, Bairro 9;1988;85541210722;F;O;V;4175.00;A
-99;Cliente 099 Teste;Rua U 199, Bairro 10;1989;92816547736723;J;M;D;4212.50;I
-100;Cliente 100 Teste;Rua V 200, Bairro 11;1990;10945826486;F;F;S;4250.00;A
+1;Mário Rafael Souza;Rua Roraima 291, Fortaleza;1959;10000000001;F;O;S;33996.62;A
+2;Daniel Diego Oliveira;Rua das Flores 105, Recife;1959;10000000002;F;O;C;35942.97;I
+3;Isabela Carolina Machado;Rua Minas Gerais 838, São Paulo;1993;10000000003;F;O;D;17342.40;A
+4;Felipe Hugo Freitas;Rua da Liberdade 104, Belém;1951;10000000004;J;F;V;40452.85;I
+5;Amanda Rafael Moreira;Rua XV de Novembro 575, Florianópolis;1998;10000000005;J;O;C;35376.31;A
+6;Sérgio Isabela Correia;Rua das Laranjeiras 91, Fortaleza;2000;10000000006;F;F;V;22943.81;I
+7;Fernanda Renato Campos;Rua Goiás 696, Brasília;1989;10000000007;F;O;C;26939.92;A
+8;Fernanda Eduardo Moreira;Rua Minas Gerais 957, Uberlândia;1959;10000000008;J;M;C;41179.23;I
+9;Leandro Rodrigo Pereira;Rua Goiás 945, Niterói;2001;10000000009;J;M;D;20083.78;I
+10;Gustavo Larissa Almeida;Avenida Brasil 772, Uberlândia;1979;10000000010;J;O;D;44942.23;I
+11;Renato Isabela Almeida;Rua Pará 515, Belo Horizonte;1993;10000000011;F;M;C;31558.58;I
+12;Roberta Beatriz Moreira;Rua Pernambuco 620, Campinas;1978;10000000012;J;O;S;34174.03;A
+13;Daniela Amanda Pontes;Rua Minas Gerais 797, Natal;1952;10000000013;J;F;C;22959.32;I
+14;Letícia Hugo Gomes;Rua Pará 944, Curitiba;2000;10000000014;J;O;C;8065.54;A
+15;Amanda Sabrina Peixoto;Rua das Flores 623, Natal;1976;10000000015;F;M;V;43996.73;I
+16;Thiago João Ribeiro;Rua Piauí 979, Belo Horizonte;1950;10000000016;J;M;C;6855.38;I
+17;Fábio Fernanda Martins;Rua Pará 903, Vitória;1972;10000000017;F;O;C;35790.97;I
+18;Sérgio Cíntia Castro;Rua Ceará 931, Joinville;1973;10000000018;F;M;C;3669.28;A
+19;Daniel Fábio Melo;Rua Piauí 235, São Paulo;1949;10000000019;F;M;S;45318.29;I
+20;Beatriz Letícia Ribeiro;Rua Minas Gerais 695, Santos;1958;10000000020;F;O;D;12528.36;I
+21;Priscila Patrícia Fernandes;Rua da Liberdade 684, Goiânia;1967;10000000021;J;F;D;43259.92;A
+22;Daniela Cíntia Aguiar;Rua da Liberdade 72, Belém;1991;10000000022;J;M;C;9983.71;I
+23;Camila Diego Gomes;Rua Minas Gerais 483, Fortaleza;2000;10000000023;F;F;S;3004.12;A
+24;Pedro Hugo Ribeiro;Rua das Acácias 426, Santos;1975;10000000024;F;F;S;8649.54;A
+25;Tatiane Larissa Rezende;Rua das Laranjeiras 443, Uberlândia;1987;10000000025;J;M;C;15187.04;A
+26;Daniel Elaine Rezende;Avenida Paulista 775, Natal;1948;10000000026;F;O;D;25391.09;A
+27;João Letícia Costa;Rua das Acácias 80, Vitória;1949;10000000027;F;F;S;47109.01;A
+28;Daniel Roberta Oliveira;Rua Sergipe 93, Goiânia;1987;10000000028;J;F;C;33651.44;I
+29;Thiago Larissa Barros;Avenida Atlântica 697, Florianópolis;1974;10000000029;J;M;S;23185.13;A
+30;Beatriz Amanda Araujo;Rua Pará 281, Porto Alegre;2004;10000000030;J;M;C;18791.59;A
+31;Carolina Amanda Mendes;Rua das Laranjeiras 636, Joinville;1945;10000000031;J;O;S;46977.04;A
+32;Larissa Rafael Fernandes;Rua Roraima 576, Porto Alegre;1962;10000000032;J;O;C;36021.80;A
+33;Daniela Mário Martins;Rua Pará 510, Brasília;2002;10000000033;F;M;D;41552.73;A
+34;Ana André Correia;Avenida Atlântica 662, Brasília;1955;10000000034;J;O;D;28264.89;A
+35;Beatriz Wesley Barbosa;Rua Maranhão 46, Maceió;1982;10000000035;F;F;C;2570.53;I
+36;Mariana Vanessa Araujo;Rua Tocantins 265, Curitiba;1967;10000000036;J;O;C;46325.31;A
+37;Fernanda Bruno Teixeira;Rua das Flores 193, Natal;1995;10000000037;J;O;C;13706.88;A
+38;Tatiane Mariana Tavares;Avenida Brasil 214, Campinas;1967;10000000038;J;M;C;1671.39;A
+39;Leandro André Rocha;Rua XV de Novembro 801, Brasília;1967;10000000039;J;O;V;46992.24;A
+40;Larissa Bruno Machado;Rua Minas Gerais 49, Curitiba;1983;10000000040;J;F;V;22101.50;A
+41;Tatiane Michele Carvalho;Rua Minas Gerais 55, Goiânia;1945;10000000041;F;F;D;3963.70;I
+42;Victor Juliana Sales;Rua da Liberdade 747, Florianópolis;1977;10000000042;J;O;D;16646.05;I
+43;Fábio Camila Carvalho;Rua Amazonas 690, Belém;1988;10000000043;F;O;V;20600.72;A
+44;Marcelo Aline Araujo;Rua Amazonas 814, Niterói;1983;10000000044;J;F;D;22386.91;A
+45;Letícia Simone Xavier;Rua das Acácias 684, Belo Horizonte;1963;10000000045;J;M;C;33803.39;A
+46;Patrícia Gustavo Souza;Avenida Paulista 260, Santos;1984;10000000046;F;F;D;44363.78;A
+47;Bianca Wesley Moreira;Rua São Paulo 419, Fortaleza;1954;10000000047;F;M;D;11332.64;I
+48;João Fábio Ribeiro;Rua da Liberdade 477, Porto Alegre;1996;10000000048;J;O;V;47526.96;I
+49;Victor Alexandre Figueiredo;Rua Amazonas 860, Uberlândia;1973;10000000049;F;O;D;22778.45;A
+50;Mário Rodrigo Correia;Rua Amapá 543, Santos;1985;10000000050;F;F;D;4335.43;I
+51;Thiago Rodrigo Freitas;Rua Sete de Setembro 924, Uberlândia;1950;10000000051;F;M;C;19460.25;A
+52;Bianca Felipe Pereira;Rua Amazonas 427, Natal;1979;10000000052;J;F;S;10738.30;I
+53;Tatiane Sabrina Machado;Rua Rondônia 30, Niterói;1969;10000000053;J;M;V;15281.33;I
+54;Priscila Amanda Xavier;Rua Roraima 569, Vitória;2002;10000000054;F;F;C;14010.30;I
+55;Carlos Tatiane Freitas;Rua Tocantins 705, Belém;1991;10000000055;F;F;C;49045.74;A
+56;Leandro Daniel Guimarães;Rua Tocantins 37, Belo Horizonte;1986;10000000056;J;M;D;9495.59;I
+57;Tatiane Juliana Araujo;Rua Ceará 344, Natal;1993;10000000057;J;F;D;12987.44;A
+58;Simone Carlos Xavier;Rua Maranhão 63, Maceió;1959;10000000058;F;O;S;37834.54;A
+59;Patrícia Carlos Miranda;Avenida Atlântica 254, Porto Alegre;1975;10000000059;F;O;C;23519.18;I
+60;Sabrina Renato Cardoso;Rua Sergipe 631, Curitiba;1994;10000000060;F;F;S;29144.89;I
+61;Michele Daniela Moreira;Rua Pernambuco 974, Recife;1949;10000000061;F;M;V;42589.52;A
+62;Michele Mariana Campos;Rua Maranhão 448, Maceió;1949;10000000062;J;M;D;41205.38;A
+63;Diego Renato Queiroz;Rua Ceará 734, Porto Alegre;1972;10000000063;F;O;V;30987.66;I
+64;Eduardo Diego Prado;Rua Piauí 284, Natal;1999;10000000064;F;M;V;44140.74;A
+65;Hugo Eduardo Guimarães;Rua Sergipe 694, Belém;1966;10000000065;F;F;V;9501.07;A
+66;Vanessa Larissa Freitas;Rua Minas Gerais 911, Vitória;1989;10000000066;J;O;S;26073.05;A
+67;Pedro Thiago Prado;Rua Amazonas 510, Uberlândia;1993;10000000067;F;O;D;32472.19;I
+68;Carolina Carlos Costa;Rua das Laranjeiras 236, Belém;1989;10000000068;F;F;V;23926.39;I
+69;Diego Elaine Pinto;Rua Sete de Setembro 370, Campinas;1962;10000000069;J;F;C;6472.47;A
+70;Juliana Rafael Xavier;Rua Maranhão 983, Salvador;1957;10000000070;F;O;D;14186.73;I
+71;Luiza Patrícia Dias;Avenida Brasil 379, Salvador;1964;10000000071;F;O;C;14078.41;A
+72;Fábio Aline Ramos;Avenida Atlântica 663, Santos;1951;10000000072;F;O;V;23735.15;I
+73;André Bruno Santos;Rua Minas Gerais 973, Santos;1952;10000000073;F;F;D;4167.07;A
+74;Gustavo Gustavo Guimarães;Rua das Laranjeiras 97, Fortaleza;1952;10000000074;J;O;C;38896.83;I
+75;Carolina Carolina Moura;Rua Piauí 449, Florianópolis;1981;10000000075;F;O;S;47405.71;A
+76;Mário Felipe Martins;Rua Tocantins 93, Salvador;1960;10000000076;F;O;S;8248.36;I
+77;Carolina Wesley Viana;Rua São Paulo 308, Rio de Janeiro;1959;10000000077;J;O;V;35297.88;I
+78;Beatriz Daniela Melo;Rua Minas Gerais 816, Niterói;1987;10000000078;F;F;S;27455.84;A
+79;Rodrigo Gustavo Pereira;Avenida Paulista 179, Florianópolis;1983;10000000079;J;F;S;23700.55;I
+80;Wesley Leandro Rocha;Rua Pará 562, Santos;1973;10000000080;F;O;S;44526.43;I
+81;Roberta Larissa Souza;Rua XV de Novembro 244, Niterói;1982;10000000081;F;O;V;29024.23;A
+82;Simone Gabriel Aguiar;Rua Ceará 948, Brasília;1956;10000000082;J;O;D;48468.23;I
+83;Vanessa Priscila Freitas;Rua Sete de Setembro 696, Curitiba;1999;10000000083;F;F;D;34836.85;I
+84;Sérgio Leandro Pontes;Rua Maranhão 47, Campinas;1950;10000000084;J;F;V;6238.12;I
+85;Letícia Ana Sales;Rua Maranhão 483, Goiânia;1948;10000000085;F;O;V;31320.38;I
+86;Mário Carolina Pontes;Avenida Paulista 218, Brasília;1980;10000000086;F;F;D;44101.91;I
+87;Rafael Carlos Queiroz;Rua Sergipe 828, Fortaleza;1990;10000000087;F;F;S;27836.44;A
+88;Isabela Rafael Rezende;Rua da Liberdade 673, Porto Alegre;1976;10000000088;J;O;V;21066.77;I
+89;Simone Thiago Rezende;Rua Maranhão 158, Belém;1957;10000000089;F;M;V;38747.42;I
+90;André Letícia Rocha;Rua das Flores 299, Florianópolis;1998;10000000090;J;M;D;27159.74;I
+91;André Fábio Pontes;Rua Maranhão 396, Campinas;2004;10000000091;J;M;C;28803.98;A
+92;Sabrina Priscila Oliveira;Rua Sete de Setembro 772, Santos;1990;10000000092;J;F;C;25018.77;A
+93;Camila Letícia Machado;Rua Sete de Setembro 900, Curitiba;2000;10000000093;J;M;D;1259.71;A
+94;Priscila Cíntia Barbosa;Rua XV de Novembro 490, Brasília;1966;10000000094;J;O;S;42662.38;I
+95;Juliana Mário Mendes;Rua Amapá 509, Uberlândia;1947;10000000095;F;M;V;49872.58;A
+96;Diego Luiza Pontes;Rua Acre 730, Curitiba;1973;10000000096;F;O;V;45219.49;A
+97;Juliana João Dias;Rua Bahia 393, Goiânia;1954;10000000097;F;O;D;28513.44;A
+98;Fernanda Bruno Costa;Rua Sergipe 901, Belém;1984;10000000098;F;F;C;11993.33;I
+99;Eduardo Larissa Sales;Rua das Flores 930, Campinas;2002;10000000099;J;O;C;4156.16;I
+100;Daniel Marcelo Queiroz;Rua Amazonas 716, Brasília;1974;10000000100;J;M;D;42740.11;A
