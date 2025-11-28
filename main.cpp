@@ -40,6 +40,7 @@ struct BaseClientes {
     Cliente *dados = nullptr;
     size_t tamanho = 0;
     size_t capacidade = 0;
+    int proximo_id = 1;
 };
 
 // Declarações antecipadas
@@ -47,6 +48,15 @@ bool salvar_clientes(BaseClientes &base);
 void pausar();
 void limpar_tela();
 void desenhar_banner(const string &titulo);
+void atualizar_proximo_id(BaseClientes &base);
+int encontrar_indice_por_id(BaseClientes &base, int id);
+bool manipular_cliente(BaseClientes &base, size_t indice);
+Cliente ler_dados_cliente(int id_atribuido);
+bool editar_por_indice(BaseClientes &base, size_t indice);
+bool remover_por_indice(BaseClientes &base, size_t indice);
+int busca_binaria_id(const Cliente *dados, size_t quantidade, int alvo);
+int busca_binaria_nome(Cliente *dados, size_t quantidade, const string &nome);
+bool inserir_cliente(BaseClientes &base);
 
 // --------------------------------------------------------------
 // Utilidades de entrada
@@ -189,6 +199,25 @@ void ordenar_por_nome(Cliente *dados, size_t quantidade) {
 }
 
 // --------------------------------------------------------------
+// Controle de IDs
+// --------------------------------------------------------------
+
+void atualizar_proximo_id(BaseClientes &base) {
+    int maior = 0;
+    for (size_t i = 0; i < base.tamanho; ++i) {
+        if (base.dados[i].id > maior) {
+            maior = base.dados[i].id;
+        }
+    }
+    base.proximo_id = maior + 1;
+}
+
+int encontrar_indice_por_id(BaseClientes &base, int id) {
+    ordenar_por_id(base.dados, base.tamanho);
+    return busca_binaria_id(base.dados, base.tamanho, id);
+}
+
+// --------------------------------------------------------------
 // Persistência em arquivo binário
 // --------------------------------------------------------------
 
@@ -269,7 +298,7 @@ bool importar_de_csv(BaseClientes &base) {
         }
         base.dados[base.tamanho++] = cli;
     }
-
+    atualizar_proximo_id(base);
     return true;
 }
 
@@ -288,6 +317,7 @@ bool carregar_clientes(BaseClientes &base) {
             }
             base.dados[base.tamanho++] = temp;
         }
+        atualizar_proximo_id(base);
         return true;
     }
 
@@ -319,6 +349,7 @@ bool salvar_clientes(BaseClientes &base) {
             return false;
         }
     }
+    atualizar_proximo_id(base);
     return salvar_csv(base);
 }
 
@@ -367,12 +398,6 @@ int busca_binaria_nome(Cliente *dados, size_t quantidade, const string &nome) {
 // CRUD
 // --------------------------------------------------------------
 
-bool existe_id(const BaseClientes &base, int id) {
-    // Necessário estar ordenado por ID para busca binária correta
-    ordenar_por_id(base.dados, base.tamanho);
-    return busca_binaria_id(base.dados, base.tamanho, id) != -1;
-}
-
 bool existe_documento(const BaseClientes &base, const string &documento) {
     for (size_t i = 0; i < base.tamanho; ++i) {
         if (documento == base.dados[i].documento) {
@@ -382,9 +407,9 @@ bool existe_documento(const BaseClientes &base, const string &documento) {
     return false;
 }
 
-Cliente ler_cliente() {
+Cliente ler_dados_cliente(int id_atribuido) {
     Cliente c;
-    c.id = ler_inteiro("ID (inteiro)");
+    c.id = id_atribuido;
     string nome = ler_linha("Nome completo");
     string endereco = ler_linha("Endereço");
     string documento = ler_linha("CPF/CNPJ (somente números)");
@@ -435,27 +460,42 @@ void listar_clientes(BaseClientes &base) {
             imprimir_cartao(base.dados[i]);
         }
 
-        if (ate == base.tamanho) {
-            return;
-        }
-
-        string opcao = ler_linha("Exibir próxima página? (S/N)");
-        if (!opcao.empty() && (opcao[0] == 's' || opcao[0] == 'S')) {
-            indice = ate;
-        } else {
-            return;
+        string opcao = ler_linha("[P]róxima página, [E]ditar ID, [R]emover ID, [N]ovo cadastro, [S]air: ");
+        if (!opcao.empty()) {
+            char acao = static_cast<char>(toupper(static_cast<unsigned char>(opcao[0])));
+            if (acao == 'P') {
+                indice = ate;
+                if (indice >= base.tamanho) {
+                    return;
+                }
+            } else if (acao == 'E') {
+                int id = ler_inteiro("Informe o ID para edição");
+                int pos = encontrar_indice_por_id(base, id);
+                if (pos >= 0) {
+                    manipular_cliente(base, static_cast<size_t>(pos));
+                } else {
+                    cout << "\nID não encontrado.\n\n";
+                }
+            } else if (acao == 'R') {
+                int id = ler_inteiro("Informe o ID para remoção");
+                int pos = encontrar_indice_por_id(base, id);
+                if (pos >= 0) {
+                    manipular_cliente(base, static_cast<size_t>(pos));
+                } else {
+                    cout << "\nID não encontrado.\n\n";
+                }
+            } else if (acao == 'N') {
+                inserir_cliente(base);
+            } else {
+                return;
+            }
         }
     }
 }
 
 bool inserir_cliente(BaseClientes &base) {
     desenhar_banner("Novo cadastro de cliente");
-    Cliente novo = ler_cliente();
-
-    if (existe_id(base, novo.id)) {
-        cout << "\nJá existe um cliente com o ID " << novo.id << ".\n\n";
-        return false;
-    }
+    Cliente novo = ler_dados_cliente(base.proximo_id);
     if (existe_documento(base, novo.documento)) {
         cout << "\nDocumento " << novo.documento << " já cadastrado.\n\n";
         return false;
@@ -466,6 +506,7 @@ bool inserir_cliente(BaseClientes &base) {
     }
 
     base.dados[base.tamanho++] = novo;
+    base.proximo_id++;
     if (!salvar_clientes(base)) {
         return false;
     }
@@ -477,23 +518,18 @@ bool inserir_cliente(BaseClientes &base) {
 bool atualizar_cliente(BaseClientes &base) {
     desenhar_banner("Atualizar cliente");
     int id = ler_inteiro("Informe o ID para atualização");
-    ordenar_por_id(base.dados, base.tamanho);
-    int indice = busca_binaria_id(base.dados, base.tamanho, id);
+    int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
         cout << "\nCliente não encontrado.\n\n";
         return false;
     }
 
     cout << "\nAtualizando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")\n";
-    Cliente atualizado = ler_cliente();
+    Cliente atualizado = ler_dados_cliente(id);
 
     for (size_t i = 0; i < base.tamanho; ++i) {
         if (static_cast<int>(i) == indice) {
             continue;
-        }
-        if (base.dados[i].id == atualizado.id) {
-            cout << "\nJá existe outro cliente com o ID " << atualizado.id << ".\n\n";
-            return false;
         }
         if (strcmp(base.dados[i].documento, atualizado.documento) == 0) {
             cout << "\nDocumento " << atualizado.documento << " já cadastrado em outro cliente.\n\n";
@@ -513,8 +549,7 @@ bool atualizar_cliente(BaseClientes &base) {
 bool remover_cliente(BaseClientes &base) {
     desenhar_banner("Remover cliente");
     int id = ler_inteiro("Informe o ID para exclusão");
-    ordenar_por_id(base.dados, base.tamanho);
-    int indice = busca_binaria_id(base.dados, base.tamanho, id);
+    int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
         cout << "\nCliente não encontrado.\n\n";
         return false;
@@ -533,11 +568,69 @@ bool remover_cliente(BaseClientes &base) {
     return true;
 }
 
+bool editar_por_indice(BaseClientes &base, size_t indice) {
+    int id = base.dados[indice].id;
+    cout << "\nEditando registro de " << base.dados[indice].nome_completo << " (ID " << id << ")\n";
+    Cliente atualizado = ler_dados_cliente(id);
+
+    for (size_t i = 0; i < base.tamanho; ++i) {
+        if (i == indice) {
+            continue;
+        }
+        if (strcmp(base.dados[i].documento, atualizado.documento) == 0) {
+            cout << "\nDocumento " << atualizado.documento << " já cadastrado em outro cliente.\n\n";
+            return false;
+        }
+    }
+
+    base.dados[indice] = atualizado;
+    if (!salvar_clientes(base)) {
+        return false;
+    }
+
+    cout << "\nRegistro atualizado com sucesso!\n\n";
+    return true;
+}
+
+bool remover_por_indice(BaseClientes &base, size_t indice) {
+    cout << "\nRemovendo registro de ID " << base.dados[indice].id << "...\n";
+    for (size_t i = indice; i + 1 < base.tamanho; ++i) {
+        base.dados[i] = base.dados[i + 1];
+    }
+    --base.tamanho;
+    if (!salvar_clientes(base)) {
+        return false;
+    }
+    cout << "\nCliente removido com sucesso!\n\n";
+    return true;
+}
+
+bool manipular_cliente(BaseClientes &base, size_t indice) {
+    for (;;) {
+        string opcao = ler_linha("[E]ditar, [R]emover, [N]ovo cadastro, [V]oltar: ");
+        if (opcao.empty()) {
+            return false;
+        }
+        char acao = static_cast<char>(toupper(static_cast<unsigned char>(opcao[0])));
+        switch (acao) {
+            case 'E':
+                return editar_por_indice(base, indice);
+            case 'R':
+                return remover_por_indice(base, indice);
+            case 'N':
+                return inserir_cliente(base);
+            case 'V':
+                return false;
+            default:
+                cout << "Opção inválida. Tente novamente.\n";
+        }
+    }
+}
+
 void buscar_por_id(BaseClientes &base) {
     desenhar_banner("Busca por ID");
     int id = ler_inteiro("Informe o ID para busca");
-    ordenar_por_id(base.dados, base.tamanho);
-    int indice = busca_binaria_id(base.dados, base.tamanho, id);
+    int indice = encontrar_indice_por_id(base, id);
     if (indice < 0) {
         cout << "\nNenhum cliente com ID " << id << " encontrado.\n\n";
         return;
@@ -545,6 +638,7 @@ void buscar_por_id(BaseClientes &base) {
 
     const Cliente &c = base.dados[indice];
     imprimir_cartao(c);
+    manipular_cliente(base, static_cast<size_t>(indice));
 }
 
 void buscar_por_nome(BaseClientes &base) {
@@ -568,6 +662,10 @@ void buscar_por_nome(BaseClientes &base) {
     } else {
         const Cliente &c = copia[indice];
         imprimir_cartao(c);
+        int real = encontrar_indice_por_id(base, c.id);
+        if (real >= 0) {
+            manipular_cliente(base, static_cast<size_t>(real));
+        }
     }
 
     delete[] copia;
