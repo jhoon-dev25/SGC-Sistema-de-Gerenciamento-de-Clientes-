@@ -6,18 +6,21 @@
 #include <string>
 #include <strings.h>
 #include <cctype>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
 // ==============================================================
-// Sistema de Gerenciamento de Clientes
-// Equipe 25: Jhônata de Oliveira Marques e Gabriel Faria Oliveira Cunha
-// Data: 2025/2
+// Sistema de Cadastro em Arquivos com Ordenação
+// Equipe: (preencher nomes e matrículas dos integrantes)
+// Data: 2024
 // Descrição: Aplicação de terminal para gerenciamento de clientes
 // com persistência em arquivo binário ordenado.
 // ==============================================================
 
 constexpr const char *DATA_FILE = "clientes.dat";
+constexpr const char *CSV_FILE = "clientes.csv";
 constexpr size_t MAX_TEXT = 128;
 
 struct Cliente {
@@ -39,9 +42,23 @@ struct BaseClientes {
     size_t capacidade = 0;
 };
 
+// Declarações antecipadas
+bool salvar_clientes(BaseClientes &base);
+void pausar();
+void limpar_tela();
+void desenhar_banner(const string &titulo);
+
 // --------------------------------------------------------------
 // Utilidades de entrada
 // --------------------------------------------------------------
+
+bool arquivo_existe(const char *caminho) {
+    if (!caminho) {
+        return false;
+    }
+    ifstream teste(caminho, ios::binary);
+    return teste.good();
+}
 
 string ler_linha(const string &rotulo) {
     cout << rotulo << ": ";
@@ -175,20 +192,114 @@ void ordenar_por_nome(Cliente *dados, size_t quantidade) {
 // Persistência em arquivo binário
 // --------------------------------------------------------------
 
-bool carregar_clientes(BaseClientes &base) {
-    ifstream in(DATA_FILE, ios::binary);
-    if (!in) {
-        return true; // sem arquivo ainda não é erro
+bool salvar_csv(const BaseClientes &base) {
+    ofstream out(CSV_FILE, ios::trunc);
+    if (!out) {
+        perror("Não foi possível abrir o CSV para escrita");
+        return false;
     }
 
-    Cliente temp{};
-    while (in.read(reinterpret_cast<char *>(&temp), sizeof(Cliente))) {
+    out << "id;nome_completo;endereco;ano_nascimento;documento;tipo_cliente;sexo;estado_civil;limite_credito;situacao_cadastral\n";
+    out << fixed << setprecision(2);
+    for (size_t i = 0; i < base.tamanho; ++i) {
+        const Cliente &c = base.dados[i];
+        out << c.id << ';' << c.nome_completo << ';' << c.endereco << ';'
+            << c.ano_nascimento << ';' << c.documento << ';' << c.tipo_cliente
+            << ';' << c.sexo << ';' << c.estado_civil << ';' << c.limite_credito
+            << ';' << c.situacao_cadastral << "\n";
+    }
+    return true;
+}
+
+bool importar_de_csv(BaseClientes &base) {
+    ifstream in(CSV_FILE);
+    if (!in) {
+        return true; // CSV opcional
+    }
+
+    string linha;
+    bool primeira = true;
+    while (getline(in, linha)) {
+        if (primeira) {
+            primeira = false;
+            if (linha.find("id;") == 0) {
+                continue;
+            }
+        }
+        if (linha.empty()) {
+            continue;
+        }
+
+        stringstream ss(linha);
+        string campo;
+        Cliente cli{};
+
+        getline(ss, campo, ';');
+        cli.id = stoi(campo);
+
+        getline(ss, campo, ';');
+        strncpy(cli.nome_completo, campo.c_str(), MAX_TEXT - 1);
+
+        getline(ss, campo, ';');
+        strncpy(cli.endereco, campo.c_str(), MAX_TEXT - 1);
+
+        getline(ss, campo, ';');
+        cli.ano_nascimento = static_cast<short>(stoi(campo));
+
+        getline(ss, campo, ';');
+        strncpy(cli.documento, campo.c_str(), sizeof(cli.documento) - 1);
+
+        getline(ss, campo, ';');
+        cli.tipo_cliente = campo.empty() ? '\0' : campo[0];
+
+        getline(ss, campo, ';');
+        cli.sexo = campo.empty() ? '\0' : campo[0];
+
+        getline(ss, campo, ';');
+        cli.estado_civil = campo.empty() ? '\0' : campo[0];
+
+        getline(ss, campo, ';');
+        cli.limite_credito = stof(campo);
+
+        getline(ss, campo, ';');
+        cli.situacao_cadastral = campo.empty() ? '\0' : campo[0];
+
         if (!garantir_capacidade(base, base.tamanho + 1)) {
             return false;
         }
-        base.dados[base.tamanho++] = temp;
+        base.dados[base.tamanho++] = cli;
     }
+
     return true;
+}
+
+bool carregar_clientes(BaseClientes &base) {
+    if (arquivo_existe(DATA_FILE)) {
+        ifstream in(DATA_FILE, ios::binary);
+        if (!in) {
+            perror("Não foi possível abrir o arquivo de dados");
+            return false;
+        }
+
+        Cliente temp{};
+        while (in.read(reinterpret_cast<char *>(&temp), sizeof(Cliente))) {
+            if (!garantir_capacidade(base, base.tamanho + 1)) {
+                return false;
+            }
+            base.dados[base.tamanho++] = temp;
+        }
+        return true;
+    }
+
+    if (!importar_de_csv(base)) {
+        return false;
+    }
+
+    if (base.tamanho == 0) {
+        return true;
+    }
+
+    return salvar_clientes(base);
 }
 
 bool salvar_clientes(BaseClientes &base) {
@@ -208,7 +319,7 @@ bool salvar_clientes(BaseClientes &base) {
             return false;
         }
     }
-    return true;
+    return salvar_csv(base);
 }
 
 // --------------------------------------------------------------
@@ -290,21 +401,55 @@ Cliente ler_cliente() {
     return c;
 }
 
-void listar_clientes(const BaseClientes &base) {
-    cout << "\n==== CLIENTES CADASTRADOS (" << base.tamanho << ") ====\n";
-    for (size_t i = 0; i < base.tamanho; ++i) {
-        const Cliente &c = base.dados[i];
-        cout << "ID: " << c.id << " | Nome: " << c.nome_completo
-             << " | Documento: " << c.documento << " | Tipo: " << c.tipo_cliente
-             << " | Sexo: " << c.sexo << " | Estado Civil: " << c.estado_civil
-             << " | Limite: " << c.limite_credito << " | Situação: " << c.situacao_cadastral
-             << " | Nascimento: " << c.ano_nascimento << " | Endereço: " << c.endereco
-             << '\n';
+void imprimir_cartao(const Cliente &c) {
+    cout << "+------------------------------------------------+\n";
+    cout << "| ID: " << setw(6) << left << c.id << " Nome: " << setw(27) << left << c.nome_completo << "|\n";
+    cout << "| Documento: " << setw(14) << left << c.documento << " Tipo: " << setw(1) << left << c.tipo_cliente
+         << " Sexo: " << setw(1) << left << c.sexo << " Estado Civil: " << setw(1) << left << c.estado_civil << "             |\n";
+    cout << "| Limite: R$ " << setw(10) << left << fixed << setprecision(2) << c.limite_credito
+         << " Situação: " << setw(1) << left << c.situacao_cadastral << " Ano Nasc.: " << setw(4) << left << c.ano_nascimento << "      |\n";
+    cout << "| Endereço: " << setw(39) << left << c.endereco << "|\n";
+    cout << "+------------------------------------------------+\n\n";
+}
+
+void listar_clientes(BaseClientes &base) {
+    desenhar_banner("Clientes cadastrados");
+
+    if (base.tamanho == 0) {
+        cout << "Nenhum cliente cadastrado ainda.\n\n";
+        return;
     }
-    cout << "===================================\n\n";
+
+    ordenar_por_id(base.dados, base.tamanho);
+    const size_t por_pagina = 10;
+    size_t indice = 0;
+
+    while (indice < base.tamanho) {
+        size_t ate = indice + por_pagina;
+        if (ate > base.tamanho) {
+            ate = base.tamanho;
+        }
+
+        cout << "Mostrando registros " << (indice + 1) << " a " << ate << " de " << base.tamanho << "\n\n";
+        for (size_t i = indice; i < ate; ++i) {
+            imprimir_cartao(base.dados[i]);
+        }
+
+        if (ate == base.tamanho) {
+            return;
+        }
+
+        string opcao = ler_linha("Exibir próxima página? (S/N)");
+        if (!opcao.empty() && (opcao[0] == 's' || opcao[0] == 'S')) {
+            indice = ate;
+        } else {
+            return;
+        }
+    }
 }
 
 bool inserir_cliente(BaseClientes &base) {
+    desenhar_banner("Novo cadastro de cliente");
     Cliente novo = ler_cliente();
 
     if (existe_id(base, novo.id)) {
@@ -330,6 +475,7 @@ bool inserir_cliente(BaseClientes &base) {
 }
 
 bool atualizar_cliente(BaseClientes &base) {
+    desenhar_banner("Atualizar cliente");
     int id = ler_inteiro("Informe o ID para atualização");
     ordenar_por_id(base.dados, base.tamanho);
     int indice = busca_binaria_id(base.dados, base.tamanho, id);
@@ -365,6 +511,7 @@ bool atualizar_cliente(BaseClientes &base) {
 }
 
 bool remover_cliente(BaseClientes &base) {
+    desenhar_banner("Remover cliente");
     int id = ler_inteiro("Informe o ID para exclusão");
     ordenar_por_id(base.dados, base.tamanho);
     int indice = busca_binaria_id(base.dados, base.tamanho, id);
@@ -387,6 +534,7 @@ bool remover_cliente(BaseClientes &base) {
 }
 
 void buscar_por_id(BaseClientes &base) {
+    desenhar_banner("Busca por ID");
     int id = ler_inteiro("Informe o ID para busca");
     ordenar_por_id(base.dados, base.tamanho);
     int indice = busca_binaria_id(base.dados, base.tamanho, id);
@@ -396,16 +544,11 @@ void buscar_por_id(BaseClientes &base) {
     }
 
     const Cliente &c = base.dados[indice];
-    cout << "\nID: " << c.id << "\nNome: " << c.nome_completo
-         << "\nDocumento: " << c.documento << "\nTipo: " << c.tipo_cliente
-         << "\nSexo: " << c.sexo << "\nEstado civil: " << c.estado_civil
-         << "\nLimite de crédito: " << c.limite_credito
-         << "\nSituação: " << c.situacao_cadastral
-         << "\nAno de nascimento: " << c.ano_nascimento
-         << "\nEndereço: " << c.endereco << "\n\n";
+    imprimir_cartao(c);
 }
 
 void buscar_por_nome(BaseClientes &base) {
+    desenhar_banner("Busca por nome");
     string termo = ler_linha("Digite o nome completo para busca exata");
 
     // cria uma cópia para ordenar por nome sem perder a ordem de gravação
@@ -424,13 +567,7 @@ void buscar_por_nome(BaseClientes &base) {
         cout << "\nNenhum cliente chamado '" << termo << "' encontrado.\n\n";
     } else {
         const Cliente &c = copia[indice];
-        cout << "\nID: " << c.id << "\nNome: " << c.nome_completo
-             << "\nDocumento: " << c.documento << "\nTipo: " << c.tipo_cliente
-             << "\nSexo: " << c.sexo << "\nEstado civil: " << c.estado_civil
-             << "\nLimite de crédito: " << c.limite_credito
-             << "\nSituação: " << c.situacao_cadastral
-             << "\nAno de nascimento: " << c.ano_nascimento
-             << "\nEndereço: " << c.endereco << "\n\n";
+        imprimir_cartao(c);
     }
 
     delete[] copia;
@@ -445,8 +582,23 @@ void pausar() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+void limpar_tela() {
+    #ifdef _WIN32
+    system("cls");
+    #else
+    system("clear");
+    #endif
+}
+
+void desenhar_banner(const string &titulo) {
+    limpar_tela();
+    cout << "==================================================\n";
+    cout << "  " << titulo << "\n";
+    cout << "==================================================\n\n";
+}
+
 void exibir_menu() {
-    cout << "====== SISTEMA DE GERENCIAMENTO DE CLIENTES ======\n";
+    desenhar_banner("Sistema de Gerenciamento de Clientes");
     cout << "1 - Listar clientes\n";
     cout << "2 - Inserir novo cliente\n";
     cout << "3 - Atualizar cliente\n";
