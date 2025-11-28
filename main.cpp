@@ -12,9 +12,9 @@
 using namespace std;
 
 // ==============================================================
-// Sistema de Cadastro em Arquivos com Ordenação
-// Equipe: (preencher nomes e matrículas dos integrantes)
-// Data: 2024
+// Sistema de Gerenciamento de Clientes
+// Equipe 25: Jhônata de Oliveira Marques e Gabriel Faria Oliveira Cunha
+// Data: 2025/2
 // Descrição: Aplicação de terminal para gerenciamento de clientes
 // com persistência em arquivo binário ordenado.
 // ==============================================================
