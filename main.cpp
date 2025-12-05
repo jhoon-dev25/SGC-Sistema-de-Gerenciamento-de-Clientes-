@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
+#include <filesystem>
 #include <limits>
 #include <string>
 #include <strings.h>
@@ -45,7 +46,7 @@ struct BaseClientes {
 };
 
 // Declarações antecipadas
-bool salvar_clientes(BaseClientes &base);
+bool salvar_clientes(BaseClientes &base, bool ordenar_por_nome = false);
 bool ha_espaco_para_salvar(const BaseClientes &base);
 void pausar();
 void limpar_tela();
@@ -56,9 +57,15 @@ bool manipular_cliente(BaseClientes &base, size_t indice);
 Cliente ler_dados_cliente(int id_atribuido);
 bool editar_por_indice(BaseClientes &base, size_t indice);
 bool remover_por_indice(BaseClientes &base, size_t indice);
+bool remover_logicamente(BaseClientes &base, size_t indice);
+bool escolher_remocao(BaseClientes &base, size_t indice);
 int busca_binaria_id(const Cliente *dados, size_t quantidade, int alvo);
 int busca_binaria_nome(Cliente *dados, size_t quantidade, const string &nome);
 bool inserir_cliente(BaseClientes &base);
+void mostrar_trecho(BaseClientes &base, size_t ini, size_t fim);
+void submenu_ordenacao(BaseClientes &base);
+void mostrar_trecho_interativo(BaseClientes &base);
+void compactar_remocoes_logicas(BaseClientes &base);
 
 // --------------------------------------------------------------
 // Utilidades de entrada
@@ -138,18 +145,31 @@ void destruir_base(BaseClientes &base) {
     base.capacidade = 0;
 }
 
+void compactar_remocoes_logicas(BaseClientes &base) {
+    size_t destino = 0;
+    for (size_t i = 0; i < base.tamanho; ++i) {
+        if (base.dados[i].id >= 0) {
+            base.dados[destino++] = base.dados[i];
+        }
+    }
+    if (destino != base.tamanho) {
+        base.tamanho = destino;
+    }
+}
+
 bool garantir_capacidade(BaseClientes &base, size_t nova_capacidade) {
     if (nova_capacidade <= base.capacidade) {
         return true;
     }
 
-    size_t capacidade_alvo = base.capacidade == 0 ? 4 : base.capacidade;
+    size_t capacidade_alvo = base.capacidade == 0 ? 40 : base.capacidade;
+    const size_t delta = 10;
     while (capacidade_alvo < nova_capacidade) {
-        if (capacidade_alvo > numeric_limits<size_t>::max() / 2) {
+        if (capacidade_alvo > numeric_limits<size_t>::max() - delta) {
             cerr << "Quantidade máxima de cadastros atingida na memória." << endl;
             return false;
         }
-        capacidade_alvo *= 2;
+        capacidade_alvo += delta;
     }
 
     Cliente *novo_buffer = new (nothrow) Cliente[capacidade_alvo];
@@ -382,9 +402,13 @@ bool carregar_clientes(BaseClientes &base) {
     return salvar_clientes(base);
 }
 
-bool salvar_clientes(BaseClientes &base) {
-    // Ordena em memória antes de gravar para manter o arquivo organizado
-    ordenar_por_id(base.dados, base.tamanho);
+bool salvar_clientes(BaseClientes &base, bool ordenar_por_nome_flag) {
+    compactar_remocoes_logicas(base);
+    if (ordenar_por_nome_flag) {
+        ordenar_por_nome(base.dados, base.tamanho);
+    } else {
+        ordenar_por_id(base.dados, base.tamanho);
+    }
 
     if (!ha_espaco_para_salvar(base)) {
         return false;
@@ -496,6 +520,23 @@ void imprimir_cartao(const Cliente &c) {
     cout << "+------------------------------------------------+" << endl << endl;
 }
 
+void mostrar_trecho(BaseClientes &base, size_t ini, size_t fim) {
+    if (base.tamanho == 0) {
+        cout << "Nenhum cliente cadastrado ainda." << endl << endl;
+        return;
+    }
+
+    if (ini == 0 || ini > fim || fim > base.tamanho) {
+        cout << "Range inválido." << endl << endl;
+        return;
+    }
+
+    cout << "Mostrando registros " << ini << " a " << fim << " de " << base.tamanho << endl << endl;
+    for (size_t i = ini - 1; i < fim; ++i) {
+        imprimir_cartao(base.dados[i]);
+    }
+}
+
 void listar_clientes(BaseClientes &base) {
     desenhar_banner("Clientes cadastrados");
 
@@ -550,6 +591,23 @@ void listar_clientes(BaseClientes &base) {
             }
         }
     }
+}
+
+void mostrar_trecho_interativo(BaseClientes &base) {
+    desenhar_banner("Mostrar trecho armazenado");
+    if (base.tamanho == 0) {
+        cout << "Nenhum cliente cadastrado ainda." << endl << endl;
+        return;
+    }
+
+    int inicio = ler_inteiro("Exibir a partir do registro número");
+    int fim = ler_inteiro("Até o registro número");
+    if (inicio < 1 || fim < 1) {
+        cout << "Intervalo deve ser positivo." << endl << endl;
+        return;
+    }
+
+    mostrar_trecho(base, static_cast<size_t>(inicio), static_cast<size_t>(fim));
 }
 
 bool inserir_cliente(BaseClientes &base) {
@@ -620,18 +678,7 @@ bool remover_cliente(BaseClientes &base) {
         return false;
     }
 
-    for (size_t i = static_cast<size_t>(indice); i + 1 < base.tamanho; ++i) {
-        base.dados[i] = base.dados[i + 1];
-    }
-    --base.tamanho;
-
-    if (!salvar_clientes(base)) {
-        return false;
-    }
-
-    base.solicitar_salvar = true;
-    cout << endl << "Registro removido." << endl << endl;
-    return true;
+    return escolher_remocao(base, static_cast<size_t>(indice));
 }
 
 bool editar_por_indice(BaseClientes &base, size_t indice) {
@@ -671,6 +718,35 @@ bool remover_por_indice(BaseClientes &base, size_t indice) {
     return true;
 }
 
+bool remover_logicamente(BaseClientes &base, size_t indice) {
+    cout << endl << "Marcando registro de ID " << base.dados[indice].id << " como removido..." << endl;
+    base.dados[indice].id = -abs(base.dados[indice].id);
+    base.dados[indice].situacao_cadastral = 'I';
+    base.solicitar_salvar = true;
+    cout << endl << "Registro marcado para remoção. Ele será eliminado fisicamente na próxima gravação." << endl << endl;
+    return true;
+}
+
+bool escolher_remocao(BaseClientes &base, size_t indice) {
+    for (;;) {
+        string opcao = ler_linha("Remover [L]ogicamente, remover [F]isicamente, [V]oltar: ");
+        if (opcao.empty()) {
+            return false;
+        }
+        char acao = static_cast<char>(toupper(static_cast<unsigned char>(opcao[0])));
+        switch (acao) {
+            case 'L':
+                return remover_logicamente(base, indice);
+            case 'F':
+                return remover_por_indice(base, indice);
+            case 'V':
+                return false;
+            default:
+                cout << "Opção inválida. Tente novamente." << endl;
+        }
+    }
+}
+
 bool manipular_cliente(BaseClientes &base, size_t indice) {
     for (;;) {
         string opcao = ler_linha("[E]ditar, [R]emover, [N]ovo cadastro, [V]oltar: ");
@@ -682,7 +758,7 @@ bool manipular_cliente(BaseClientes &base, size_t indice) {
             case 'E':
                 return editar_por_indice(base, indice);
             case 'R':
-                return remover_por_indice(base, indice);
+                return escolher_remocao(base, indice);
             case 'N':
                 return inserir_cliente(base);
             case 'V':
@@ -737,6 +813,41 @@ void buscar_por_nome(BaseClientes &base) {
     delete[] copia;
 }
 
+void submenu_ordenacao(BaseClientes &base) {
+    bool sair = false;
+    while (!sair) {
+        desenhar_banner("Ordenar e salvar base");
+        cout << "1 - Ordenar por ID e salvar" << endl;
+        cout << "2 - Ordenar por nome e salvar" << endl;
+        cout << "0 - Voltar" << endl;
+
+        int opcao = ler_inteiro("Escolha uma opção");
+        switch (opcao) {
+            case 1:
+                if (salvar_clientes(base, false)) {
+                    base.solicitar_salvar = false;
+                    cout << endl << "Base ordenada por ID e salva." << endl << endl;
+                }
+                pausar();
+                break;
+            case 2:
+                if (salvar_clientes(base, true)) {
+                    base.solicitar_salvar = false;
+                    cout << endl << "Base ordenada por nome e salva." << endl << endl;
+                }
+                pausar();
+                break;
+            case 0:
+                sair = true;
+                break;
+            default:
+                cout << "Opção inválida." << endl;
+                pausar();
+                break;
+        }
+    }
+}
+
 // --------------------------------------------------------------
 // Interface
 // --------------------------------------------------------------
@@ -769,6 +880,8 @@ void exibir_menu() {
     cout << "4 - Remover cliente" << endl;
     cout << "5 - Buscar por ID (binária)" << endl;
     cout << "6 - Buscar por nome (binária)" << endl;
+    cout << "7 - Mostrar trecho armazenado" << endl;
+    cout << "8 - Ordenar e salvar" << endl;
     cout << "0 - Sair" << endl;
 }
 
@@ -807,6 +920,13 @@ int main() {
             case 6:
                 buscar_por_nome(base);
                 pausar();
+                break;
+            case 7:
+                mostrar_trecho_interativo(base);
+                pausar();
+                break;
+            case 8:
+                submenu_ordenacao(base);
                 break;
             case 0: {
                 bool entrada_valida = false;
