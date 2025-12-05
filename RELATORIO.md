@@ -5,10 +5,12 @@ Este relatório apresenta, de forma formal e concisa, a arquitetura, os algoritm
 
 ## 2. Visão geral das funcionalidades
 O sistema permite cadastrar, consultar, editar e remover clientes, mantendo consistência entre a memória principal e o arquivo binário `clientes.dat`. Há suporte para exportação em CSV, ordenação por identificador ou por nome e consultas eficientes por meio de busca binária. Todas as interações são conduzidas por menu textual, com validação de entradas e mensagens claras ao usuário.
+- **Exibição de trechos**: é possível imprimir intervalos arbitrários (ex.: 10º ao 20º registro) na ordem armazenada, sem necessidade de ordenação prévia.
+- **Submenu de ordenação**: o usuário pode solicitar explicitamente ordenação por ID ou por nome e acionar a gravação imediata da base.
 
 ## 3. Arquitetura e estruturas de dados
 - **Estrutura `Cliente`**: agrupa identificador incremental, nome, endereço, ano de nascimento, documento, tipo de cliente, sexo, estado civil, limite de crédito e situação cadastral. Campos textuais utilizam buffers de tamanho fixo, facilitando a serialização binária.
-- **Estrutura `BaseClientes`**: mantém ponteiro para vetor dinâmico de clientes, tamanho lógico, capacidade alocada e próximo identificador disponível. Essa organização permite expansão controlada sem realocações frequentes.
+- **Estrutura `BaseClientes`**: mantém ponteiro para vetor dinâmico de clientes, tamanho lógico, capacidade alocada e próximo identificador disponível. Essa organização permite expansão controlada sem realocações frequentes. O vetor inicia com 40 posições e cresce em blocos de 10, evitando fragmentação e garantindo previsibilidade de consumo de memória.
 - **Separação de responsabilidades**: funções utilitárias cuidam de leitura e validação de entradas; rotinas específicas tratam ordenação, busca, manipulação de registros e persistência, favorecendo testes isolados e manutenção.
 
 ## 4. Persistência e integridade
@@ -19,7 +21,9 @@ O sistema permite cadastrar, consultar, editar e remover clientes, mantendo cons
 ## 5. Algoritmos e desempenho
 - **Ordenação**: utiliza *selection sort* para organizar registros tanto por `id` quanto por `nome`. Embora a complexidade seja O(n²), o algoritmo atende ao volume acadêmico previsto e evita dependências externas.
 - **Busca**: aplica **busca binária** sobre vetores ordenados, reduzindo o tempo de localização para O(log n) e mantendo previsibilidade mesmo com conjuntos maiores.
-- **Gestão de memória**: a expansão de capacidade dobra o buffer quando necessário, amortizando realocações e preservando a validade dos ponteiros antes da gravação em disco.
+- **Gestão de memória**: o vetor dinâmico inicia com 40 posições e expande +10 quando necessário, amortizando realocações e preservando a validade dos ponteiros antes da gravação em disco.
+- **Inserção**: realizada no final do vetor para simplicidade e rapidez, com ordenação sob demanda antes de buscas binárias ou gravação.
+- **Remoção**: pode ser física ou lógica; registros marcados com identificador negativo são ignorados e removidos fisicamente durante a gravação, garantindo que o arquivo permaneça limpo.
 
 ## 6. Interface e experiência do usuário
 - **Menu textual**: organiza operações em opções numeradas, com separadores e títulos que favorecem leitura em terminais simples.
