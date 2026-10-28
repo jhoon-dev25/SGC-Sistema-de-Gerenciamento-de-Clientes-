@@ -22,7 +22,7 @@ O Sistema de Gerenciamento de Clientes é uma aplicação de terminal que manté
 
 ## Ordenação e buscas
 - **Ordenação manual**: há duas rotinas de Selection Sort — uma por ID e outra por nome — que percorrem o vetor trocando a menor chave encontrada para a posição corrente, evitando o uso de bibliotecas prontas de ordenação.
-- **Busca binária**: o vetor ordenado por ID é pesquisado com busca binária iterativa. Para consultas por nome, o algoritmo cria uma cópia do vetor, ordena-a por nome e procura o termo com busca binária, preservando a ordem original de gravação.
+- **Busca binária recursiva**: o vetor ordenado por ID é pesquisado por chamadas recursivas que reduzem o intervalo pela metade. Para consultas por nome, o programa cria uma cópia do vetor, ordena-a por nome e procura o termo com o mesmo algoritmo recursivo, preservando a ordem original de gravação.
 
 ## Operações de CRUD
 - **Listagem**: os registros são ordenados por ID e exibidos em páginas de 10 itens, com atalhos para navegar, editar, remover ou inserir novos clientes.
@@ -57,3 +57,4 @@ Execute no diretório que contém `clientes.dat` e `clientes.csv`, pois os nomes
 - `clientes.csv`: dados em formato de texto.
 - `clientes.dat`: dados binários carregados prioritariamente quando o arquivo existe.
 - `guia_de_estudo_main_cpp.md`: material de apoio para explicar o código.
+- `relatorio_completo_projeto_sgc.pdf`: relatório técnico completo e material de apoio à apresentação.

@@ -220,18 +220,18 @@ Ordena a base por ID e chama busca_binaria_id. A ordenação é necessária porq
 
 ### busca_binaria_id
 
-inicio e fim delimitam a parte que ainda pode conter o alvo. meio é o ponto central:
+busca_binaria_id inicia a busca no intervalo completo, da posição 0 até quantidade - 1, e chama busca_binaria_id_recursiva. Essa função recebe os limites do trecho que ainda pode conter o alvo. meio é o ponto central:
 
 - se o ID central for o alvo, retorna meio;
-- se o ID central for menor, continua na metade da direita;
-- se for maior, continua na metade da esquerda;
-- se o intervalo acabar, retorna -1.
+- se o ID central for menor, chama a si mesma para a metade da direita;
+- se for maior, chama a si mesma para a metade da esquerda;
+- se inicio > fim, o intervalo acabou e a função retorna -1.
 
-Em cada repetição, o trecho possível diminui aproximadamente pela metade.
+O caso inicio > fim é a condição de parada: sem ele, as chamadas poderiam continuar indefinidamente. Cada chamada escolhe apenas uma metade, então a quantidade de posições possíveis cai pela metade.
 
 ### busca_binaria_nome
 
-Ordena por nome o vetor recebido e busca o termo usando comparar_texto. A função pode alterar esse vetor. buscar_por_nome passa uma cópia para que a ordem da base original não seja alterada por essa ordenação.
+Ordena por nome o vetor recebido e inicia a busca recursiva no intervalo completo. busca_binaria_nome_recursiva compara o nome central com o termo usando comparar_texto; em seguida, retorna a posição, chama a si mesma em uma das metades ou retorna -1 quando o intervalo acaba. A ordenação pode alterar o vetor, por isso buscar_por_nome passa uma cópia e preserva a ordem da base original.
 
 ## 10. Arquivos
 
@@ -379,14 +379,12 @@ Selection Sort por ID:
 
 Busca binária:
 
-    inicio = primeira posição
-    fim = quantidade de registros
-    enquanto inicio < fim:
+    busca_recursiva(inicio, fim):
+        se inicio > fim: devolver -1
         meio = centro do intervalo
         se o elemento central é o alvo: devolver meio
-        se o elemento central é menor: continuar à direita
-        caso contrário: continuar à esquerda
-    devolver -1
+        se o elemento central é menor: buscar recursivamente à direita
+        caso contrário: buscar recursivamente à esquerda
 
 Remover do vetor:
 
@@ -420,6 +418,9 @@ clear permite novas leituras após uma falha; ignore descarta a entrada inválid
 
 **O que significa -1 na busca?**  
 É um indicador de que nenhum índice válido foi encontrado.
+
+**Como a busca recursiva para?**  
+Quando inicio fica maior que fim, não há posições restantes para verificar. Essa é a condição de parada, e o resultado é -1.
 
 **Por que new[] e delete[]?**  
 O vetor é reservado dinamicamente porque sua capacidade pode crescer. delete[] libera a área no encerramento ou quando ela é substituída.

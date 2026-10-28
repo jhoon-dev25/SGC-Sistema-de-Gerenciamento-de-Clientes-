@@ -55,6 +55,8 @@ bool editar_por_indice(BaseClientes &base, int indice);
 bool remover_por_indice(BaseClientes &base, int indice);
 int busca_binaria_id(const Cliente *dados, int quantidade, int alvo);
 int busca_binaria_nome(Cliente *dados, int quantidade, const string &nome);
+int busca_binaria_id_recursiva(const Cliente *dados, int inicio, int fim, int alvo);
+int busca_binaria_nome_recursiva(const Cliente *dados, int inicio, int fim, const string &nome);
 bool inserir_cliente(BaseClientes &base);
 
 // --------------------------------------------------------------
@@ -418,40 +420,43 @@ bool salvar_clientes(BaseClientes &base) {
 // --------------------------------------------------------------
 
 int busca_binaria_id(const Cliente *dados, int quantidade, int alvo) {
-    int inicio = 0;
-    int fim = quantidade;
-    while (inicio < fim) {
-        int meio = inicio + (fim - inicio) / 2;
-        if (dados[meio].id == alvo) {
-            return meio;
-        }
-        if (dados[meio].id < alvo) {
-            inicio = meio + 1;
-        } else {
-            fim = meio;
-        }
+    return busca_binaria_id_recursiva(dados, 0, quantidade - 1, alvo);
+}
+
+int busca_binaria_id_recursiva(const Cliente *dados, int inicio, int fim, int alvo) {
+    if (inicio > fim) {
+        return -1;
     }
-    return -1;
+
+    int meio = inicio + (fim - inicio) / 2;
+    if (dados[meio].id == alvo) {
+        return meio;
+    }
+    if (dados[meio].id < alvo) {
+        return busca_binaria_id_recursiva(dados, meio + 1, fim, alvo);
+    }
+    return busca_binaria_id_recursiva(dados, inicio, meio - 1, alvo);
 }
 
 int busca_binaria_nome(Cliente *dados, int quantidade, const string &nome) {
     ordenar_por_nome(dados, quantidade);
+    return busca_binaria_nome_recursiva(dados, 0, quantidade - 1, nome);
+}
 
-    int inicio = 0;
-    int fim = quantidade;
-    while (inicio < fim) {
-        int meio = inicio + (fim - inicio) / 2;
-        int comparacao = comparar_texto(dados[meio].nome_completo, nome.c_str());
-        if (comparacao == 0) {
-            return meio;
-        }
-        if (comparacao < 0) {
-            inicio = meio + 1;
-        } else {
-            fim = meio;
-        }
+int busca_binaria_nome_recursiva(const Cliente *dados, int inicio, int fim, const string &nome) {
+    if (inicio > fim) {
+        return -1;
     }
-    return -1;
+
+    int meio = inicio + (fim - inicio) / 2;
+    int comparacao = comparar_texto(dados[meio].nome_completo, nome.c_str());
+    if (comparacao == 0) {
+        return meio;
+    }
+    if (comparacao < 0) {
+        return busca_binaria_nome_recursiva(dados, meio + 1, fim, nome);
+    }
+    return busca_binaria_nome_recursiva(dados, inicio, meio - 1, nome);
 }
 
 // --------------------------------------------------------------
