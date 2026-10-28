@@ -40,7 +40,6 @@ struct BaseClientes {
     int tamanho;
     int capacidade;
     int proximo_id;
-    bool solicitar_salvar;
 };
 
 // Declarações antecipadas
@@ -230,7 +229,7 @@ void ordenar_por_nome(Cliente *dados, int quantidade) {
     for (int i = 0; i + 1 < quantidade; ++i) {
         int indice_min = i;
         for (int j = i + 1; j < quantidade; ++j) {
-            if (strcmp(dados[j].nome_completo, dados[indice_min].nome_completo) < 0) {
+            if (comparar_texto(dados[j].nome_completo, dados[indice_min].nome_completo) < 0) {
                 indice_min = j;
             }
         }
@@ -407,7 +406,11 @@ bool salvar_clientes(BaseClientes &base) {
         return false;
     }
     atualizar_proximo_id(base);
-    return salvar_csv(base);
+    if (!salvar_csv(base)) {
+        cerr << "Aviso: os dados foram gravados em clientes.dat, mas clientes.csv não foi atualizado."
+             << endl;
+    }
+    return true;
 }
 
 // --------------------------------------------------------------
@@ -529,7 +532,7 @@ void listar_clientes(BaseClientes &base) {
                 int id = ler_inteiro("Informe o ID para edição");
                 int pos = encontrar_indice_por_id(base, id);
                 if (pos >= 0) {
-                    manipular_cliente(base, pos);
+                    editar_por_indice(base, pos);
                 } else {
                     cout << endl << "ID não encontrado." << endl << endl;
                 }
@@ -537,7 +540,7 @@ void listar_clientes(BaseClientes &base) {
                 int id = ler_inteiro("Informe o ID para remoção");
                 int pos = encontrar_indice_por_id(base, id);
                 if (pos >= 0) {
-                    manipular_cliente(base, pos);
+                    remover_por_indice(base, pos);
                 } else {
                     cout << endl << "ID não encontrado." << endl << endl;
                 }
@@ -574,7 +577,6 @@ bool inserir_cliente(BaseClientes &base) {
         return false;
     }
 
-    base.solicitar_salvar = true;
     cout << endl << "Cliente cadastrado com sucesso!" << endl << endl;
     return true;
 }
@@ -604,7 +606,6 @@ bool atualizar_cliente(BaseClientes &base) {
         return false;
     }
 
-    base.solicitar_salvar = true;
     cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
@@ -627,7 +628,6 @@ bool remover_cliente(BaseClientes &base) {
         return false;
     }
 
-    base.solicitar_salvar = true;
     cout << endl << "Registro removido." << endl << endl;
     return true;
 }
@@ -650,7 +650,6 @@ bool editar_por_indice(BaseClientes &base, int indice) {
         return false;
     }
 
-    base.solicitar_salvar = true;
     cout << endl << "Registro atualizado com sucesso!" << endl << endl;
     return true;
 }
@@ -664,7 +663,6 @@ bool remover_por_indice(BaseClientes &base, int indice) {
     if (!salvar_clientes(base)) {
         return false;
     }
-    base.solicitar_salvar = true;
     cout << endl << "Cliente removido com sucesso!" << endl << endl;
     return true;
 }
@@ -803,34 +801,8 @@ int main() {
                 buscar_por_nome(base);
                 pausar();
                 break;
-            case 0: {
-                bool entrada_valida = false;
-                while (!entrada_valida) {
-                    char resposta = ler_char("Deseja salvar as alterações antes de sair? (S/N)");
-                    char escolha = maiusculo(resposta);
-
-                    if (escolha == 'S') {
-                        if (!salvar_clientes(base)) {
-                            cout << endl
-                                 << "Falha ao salvar os dados. Permanecendo no sistema para evitar perda de informações." << endl
-                                 << endl;
-                            opcao = -1;
-                        } else {
-                            base.solicitar_salvar = false;
-                            cout << endl << "Dados salvos com sucesso." << endl << endl;
-                        }
-                        entrada_valida = true;
-                    } else if (escolha == 'N') {
-                        if (base.solicitar_salvar) {
-                            cout << endl << "Saindo sem salvar alterações." << endl << endl;
-                        }
-                        entrada_valida = true;
-                    } else {
-                        cout << "Opção inválida. Responda com 'S' para sim ou 'N' para não." << endl;
-                    }
-                }
+            case 0:
                 break;
-            }
             default:
                 cout << "Opção inválida!" << endl << endl;
                 pausar();

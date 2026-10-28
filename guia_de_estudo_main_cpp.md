@@ -96,7 +96,6 @@ BaseClientes guarda o estado do vetor dinâmico:
 - tamanho: quantidade de clientes efetivamente cadastrados;
 - capacidade: quantidade de posições reservadas;
 - proximo_id: ID usado no próximo cadastro;
-- solicitar_salvar: sinalizador consultado no fluxo de saída.
 
 Tamanho e capacidade são diferentes. Se tamanho vale 5 e capacidade vale 8, os índices 0 a 4 contêm registros válidos e há três posições reservadas ainda livres.
 
@@ -199,13 +198,13 @@ Depois de cada rodada, o menor ID do trecho não ordenado fica na posição i. O
 
 ### ordenar_por_nome
 
-Também é Selection Sort, comparando nome_completo com strcmp. Essa comparação diferencia maiúsculas de minúsculas.
+Também é Selection Sort, mas compara nome_completo com comparar_texto. Isso faz a ordenação seguir a mesma regra de comparação que a busca binária por nome.
 
 ### comparar_texto
 
 Percorre dois textos caractere a caractere, converte cada caractere ASCII para maiúscula e compara. Retorna -1 se o primeiro texto precede o segundo, 1 se sucede, e 0 se forem iguais segundo essa comparação. É usada pela busca binária por nome.
 
-Atenção: ordenar_por_nome usa strcmp, enquanto a busca binária usa comparar_texto, que não diferencia capitalização ASCII. A busca binária precisa que a ordenação e a comparação sigam a mesma regra. Nomes com diferenças de maiúsculas/minúsculas podem expor essa inconsistência. Se perguntarem, reconheça-a; não diga que os comparadores são iguais.
+Ordenação e busca agora usam a mesma função de comparação, evitando que a busca binária descarte a região errada por causa de capitalização ASCII. A conversão manual só normaliza letras ASCII; não implementa regras linguísticas completas para letras acentuadas em UTF-8.
 
 ## 9. IDs e buscas
 
@@ -270,7 +269,7 @@ Se o binário existir, ele tem prioridade. O programa não verifica se o CSV est
 
 Ordena os registros por ID, abre clientes.dat em modo binário e truncado, e grava cada Cliente com write. A expressão (char *)&base.dados[i] fornece o endereço do registro como sequência de bytes. sizeof(Cliente) informa o número de bytes do registro.
 
-Depois verifica erros, atualiza proximo_id e chama salvar_csv. As operações de inclusão, edição e remoção chamam essa função imediatamente.
+Depois verifica erros e atualiza proximo_id. Em seguida chama salvar_csv. Se o binário foi salvo, mas a exportação do CSV falhar, mostra um aviso específico e considera a operação principal bem-sucedida: clientes.dat é o arquivo prioritário usado no próximo carregamento. As operações de inclusão, edição e remoção chamam essa função imediatamente.
 
 ## 11. Operações de cadastro
 
@@ -286,7 +285,7 @@ Inicializa c zerado, define seu ID e pergunta os campos. nome, endereco e docume
 
 ### inserir_cliente
 
-Usa proximo_id para montar o novo registro. Verifica se o documento já existe. Depois garante espaço, coloca novo na posição tamanho, aumenta tamanho e proximo_id e salva. Se a gravação retornar false, diminui tamanho e proximo_id para desfazer a inclusão em memória. Em sucesso, marca solicitar_salvar e mostra a mensagem de conclusão.
+Usa proximo_id para montar o novo registro. Verifica se o documento já existe. Depois garante espaço, coloca novo na posição tamanho, aumenta tamanho e proximo_id e salva. Se a gravação retornar false, diminui tamanho e proximo_id para desfazer a inclusão em memória. Em sucesso, mostra a mensagem de conclusão.
 
 ### atualizar_cliente
 
@@ -317,9 +316,9 @@ Mostra mensagem se não há clientes. Caso contrário, ordena por ID e pagina os
 - ate calcula o limite final e é reduzido se ultrapassar tamanho.
 - i percorre a página.
 - opcao guarda a resposta; acao guarda a primeira letra em maiúscula.
-- P avança, E busca um ID para edição, R busca um ID, N inicia cadastro e outras opções saem da listagem.
+- P avança, E busca um ID e chama editar_por_indice, R busca um ID e chama remover_por_indice, N inicia cadastro e outras opções saem.
 
-Atenção: os ramos E e R chamam manipular_cliente. Logo, R na listagem abre o menu contextual em vez de remover diretamente. A opção de remoção do menu principal chama remover_cliente.
+Assim, as ações descritas no prompt da listagem correspondem ao que acontece: E edita e R remove diretamente. O menu contextual continua disponível depois de uma busca individual.
 
 ### buscar_por_id
 
@@ -350,14 +349,14 @@ desenhar_banner limpa a tela e imprime o título com separadores. exibir_menu ch
 3. Inicia opcao em -1 para entrar no while.
 4. Enquanto opcao não for 0, exibe o menu e lê a opção.
 5. switch chama a função correspondente e pausa a tela nas opções de 1 a 6.
-6. Na opção 0, entrada_valida controla o laço de resposta; resposta guarda a letra digitada e escolha sua versão maiúscula.
-7. Se salvar falhar, opcao volta a -1 para manter o programa no laço. Se salvar funcionar, mostra confirmação. Ao final, destrói a base e retorna 0.
+6. Na opção 0, o laço termina; cada operação de alteração já tentou gravar os arquivos.
+7. Ao final, destrói a base e retorna 0.
 
-## 13. Uma inconsistência importante na saída
+## 13. Salvamento e saída
 
-As operações de cadastro, edição e remoção chamam salvar_clientes imediatamente, mas também marcam solicitar_salvar como true. Ao sair, o sistema pergunta se quer salvar de novo. Responder N não desfaz as alterações já gravadas. Portanto, a mensagem “Saindo sem salvar alterações” não descreve com precisão o efeito: as operações já foram persistidas.
+As operações de cadastro, edição e remoção chamam salvar_clientes imediatamente. A opção 0 agora encerra o laço sem apresentar uma segunda pergunta de salvamento. Isso deixa a saída coerente com o comportamento real: as alterações são persistidas durante as próprias operações. Se a gravação do binário funcionar e somente a atualização do CSV falhar, a mensagem informa que o registro está salvo no binário e que o CSV ficou desatualizado.
 
-Se perguntarem, explique o comportamento real. Não diga que N desfaz operações.
+Se uma operação não conseguir salvar, ela informa a falha. A saída não tenta repetir automaticamente uma gravação que já falhou.
 
 ## 14. Pseudocódigo dos algoritmos centrais
 
@@ -431,11 +430,11 @@ Não. CSV é texto delimitado, binário é uma sequência de bytes na representa
 **O binário é portátil?**  
 Não necessariamente. Depende dos tamanhos e da representação dos tipos e do alinhamento usados pelo compilador e pela máquina.
 
-**A busca por nome é garantida em qualquer capitalização?**  
-Não. A ordenação usa strcmp e a busca usa comparação sem distinção de caixa ASCII. Essa diferença pode causar falha em casos de nomes com capitalização diferente.
+**Como a ordenação por nome combina com a busca binária?**  
+As duas usam comparar_texto, então aplicam a mesma regra a letras ASCII e a busca pode confiar na ordem produzida. A comparação manual não aplica conversão linguística completa a letras acentuadas em UTF-8.
 
-**Escolher N ao sair desfaz minhas alterações?**  
-Não. As operações CRUD já chamam o salvamento imediatamente; N não restaura arquivos anteriores.
+**Quando as alterações são salvas?**  
+As operações CRUD tentam salvar imediatamente. Ao escolher 0, o programa encerra sem uma pergunta redundante de salvamento.
 
 ## 16. Roteiro para apresentar
 
@@ -448,9 +447,35 @@ Uma apresentação pode seguir estes passos:
 5. Algoritmos: explicar Selection Sort e busca binária.
 6. Persistência: comparar CSV texto com DAT binário e mostrar a prioridade de carregamento.
 7. Operações: resumir inclusão, busca, atualização e remoção.
-8. Limitações: reconhecer a regra de comparação dos nomes, o parser CSV simples e o salvamento imediato seguido de pergunta redundante.
+8. Limitações: reconhecer o parser CSV simples, a dependência do formato binário da máquina e o tratamento limitado de falta de memória.
 
 É melhor explicar a lógica com um exemplo pequeno do que ler o código linha a linha. Por exemplo, para a busca binária, use cinco IDs ordenados e mostre como o intervalo diminui.
+
+## 16.1 Como justificar uma escolha diferente
+
+Você não precisa concordar automaticamente com toda preferência de estilo. Na apresentação, a justificativa fica mais forte quando explica o objetivo, o benefício, o custo e a alternativa. Uma forma respeitosa de responder é:
+
+1. reconhecer a preocupação do professor;
+2. explicar o que você queria melhorar para o usuário;
+3. esclarecer se a escolha afeta a lógica principal ou apenas a interface;
+4. reconhecer a limitação da sua escolha;
+5. dizer em que condição você aceitaria outra solução.
+
+### Exemplo: limpar a tela e redesenhar o banner
+
+O código tem a função limpar_tela, que chama cls no Windows ou clear nos outros sistemas, e desenhar_banner, que limpa a tela e imprime um título entre separadores. exibir_menu usa esse banner antes de mostrar as opções.
+
+Uma justificativa possível para manter esse recurso:
+
+> “Eu entendo a preferência por uma interface de terminal mais simples. Mantive a limpeza e o banner porque organizam a tela, destacam o menu atual e evitam que várias telas de opções fiquem acumuladas. Isso ajuda o usuário a acompanhar o fluxo do sistema. A escolha afeta apenas a apresentação; não altera os registros, as buscas ou a persistência dos dados.”
+
+Também é importante reconhecer o custo:
+
+> “A limpeza usa comandos específicos do sistema operacional e apaga o conteúdo anterior do terminal. Se a prioridade for máxima portabilidade, simplicidade ou manter o histórico visível, eu removeria a chamada a limpar_tela ou deixaria o banner sem limpar a tela.”
+
+Essa defesa não afirma que a escolha é a única correta. Ela mostra que houve uma decisão consciente entre organização visual e simplicidade/portabilidade. Não diga que o uso de system ou dos comandos clear/cls foi ensinado na disciplina sem ter certeza; o plano de ensino lista os conteúdos de algoritmos, mas não estabelece essa escolha de interface.
+
+Para outras críticas, use o mesmo formato. Não invente uma justificativa antes de saber exatamente qual é a observação e qual requisito ela atende.
 
 ## 17. Compilar e executar
 

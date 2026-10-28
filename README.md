@@ -29,13 +29,13 @@ O Sistema de Gerenciamento de Clientes é uma aplicação de terminal que manté
 - **Inserção**: atribui um ID incremental, coleta os campos via leitura interativa, rejeita documentos já cadastrados, garante capacidade do vetor e persiste a base logo após a inclusão.
 - **Atualização**: localiza o ID via busca binária, relê todos os campos e previne duplicidade de documento antes de sobrescrever o registro e salvar a base.
 - **Remoção**: encontra o índice do cliente, desloca os elementos subsequentes para fechar o espaço e grava novamente o arquivo ordenado.
-- **Ações contextuais**: ao exibir um cartão de cliente individual (em buscas ou listagem), o usuário pode editar, remover ou criar um novo registro sem sair do fluxo atual.
+- **Ações contextuais**: após uma busca individual, o usuário pode editar, remover ou criar um novo registro. Na listagem, as opções E e R executam diretamente a edição e a remoção do ID informado.
 
 ## Entrada e validação
 As leituras numéricas de inteiros e números reais são repetidas quando a conversão falha. As opções de uma letra são convertidas para maiúsculas; o código usa as letras ASCII dos menus. Campos de texto são copiados respeitando os tamanhos fixos dos vetores e reservando espaço para o terminador `\0`.
 
 ## Observações sobre o comportamento
-As operações de inclusão, atualização e remoção gravam os arquivos imediatamente. Apesar disso, o menu de saída ainda pergunta se deseja salvar; responder que não não desfaz as operações já gravadas. Na listagem, a opção `R` abre o menu contextual do cliente, onde a remoção pode ser escolhida.
+As operações de inclusão, atualização e remoção gravam os arquivos imediatamente. A opção 0 encerra o programa sem perguntar novamente se deseja salvar. Na listagem, E executa a edição e R executa a remoção do ID informado. A ordenação e a busca por nome usam a mesma regra de comparação para letras ASCII. Se o binário for salvo, mas o CSV não puder ser atualizado, o programa avisa que os dados permanecem em clientes.dat.
 
 ## Interface e navegação
 O menu principal oferece atalhos para listar, inserir, atualizar, remover e buscar (por ID ou nome), sempre com banners de limpeza de tela e pausas para leitura. O programa finaliza liberando a memória alocada dinamicamente.
