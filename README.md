@@ -54,6 +54,7 @@ Execute no diretório que contém `clientes.dat` e `clientes.csv`, pois os nomes
 ## Arquivos do projeto
 
 - `main.cpp`: código-fonte do sistema.
+- `README.txt`: identificação do grupo e instruções de compilação e uso para a entrega no Campus Virtual.
 - `clientes.csv`: dados em formato de texto.
 - `clientes.dat`: dados binários carregados prioritariamente quando o arquivo existe.
 - `guia_de_estudo_main_cpp.md`: material de apoio para explicar o código.
