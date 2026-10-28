@@ -1,5 +1,13 @@
 # Documentação do algoritmo
 
+## Identificação do projeto
+
+- **Disciplina:** GAC124 - Introdução aos Algoritmos
+- **Turma:** 10R1
+- **Discentes:** Jhônata de Oliveira Marques e Henrique César Carvalho Aguiar
+
+Os nomes acima seguem a identificação que consta no cabeçalho do arquivo `main.cpp`.
+
 ## Objetivo geral
 O Sistema de Gerenciamento de Clientes é uma aplicação de terminal que mantém cadastros em um arquivo binário ordenado, permitindo importar dados iniciais de CSV e garantindo operações de inclusão, consulta, atualização e exclusão com ordenação e busca eficientes. O código foi escrito em C++ puro, privilegiando estruturas simples (arrays e structs) e algoritmos implementados manualmente.
 
@@ -24,7 +32,28 @@ O Sistema de Gerenciamento de Clientes é uma aplicação de terminal que manté
 - **Ações contextuais**: ao exibir um cartão de cliente individual (em buscas ou listagem), o usuário pode editar, remover ou criar um novo registro sem sair do fluxo atual.
 
 ## Entrada e validação
-As leituras de inteiros, `short`, `float` e caracteres são repetidas até receberem valores válidos. Campos de texto são truncados de forma segura para caber nos buffers fixos. Caracteres são normalizados para maiúsculas, reduzindo erros de digitação em campos categóricos.
+As leituras numéricas de inteiros e números reais são repetidas quando a conversão falha. As opções de uma letra são convertidas para maiúsculas; o código usa as letras ASCII dos menus. Campos de texto são copiados respeitando os tamanhos fixos dos vetores e reservando espaço para o terminador `\0`.
+
+## Observações sobre o comportamento
+As operações de inclusão, atualização e remoção gravam os arquivos imediatamente. Apesar disso, o menu de saída ainda pergunta se deseja salvar; responder que não não desfaz as operações já gravadas. Na listagem, a opção `R` abre o menu contextual do cliente, onde a remoção pode ser escolhida.
 
 ## Interface e navegação
 O menu principal oferece atalhos para listar, inserir, atualizar, remover e buscar (por ID ou nome), sempre com banners de limpeza de tela e pausas para leitura. O programa finaliza liberando a memória alocada dinamicamente.
+
+## Compilação e execução
+
+Compile com um compilador C++:
+
+```bash
+g++ -std=c++11 -Wall -Wextra -pedantic main.cpp -o main
+./main
+```
+
+Execute no diretório que contém `clientes.dat` e `clientes.csv`, pois os nomes dos arquivos são relativos ao diretório de execução.
+
+## Arquivos do projeto
+
+- `main.cpp`: código-fonte do sistema.
+- `clientes.csv`: dados em formato de texto.
+- `clientes.dat`: dados binários carregados prioritariamente quando o arquivo existe.
+- `guia_de_estudo_main_cpp.md`: material de apoio para explicar o código.
